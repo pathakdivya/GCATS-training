@@ -2,7 +2,7 @@
 
 # Gamepad Training Protocol
 
-A lightweight researcher friendly web app for familiarising behavioural research participants with a gamepad controller before they begin a main experiment. Built for use alongside [GCATS](https://github.com/pathakdivya/GCATS) (Gamepad-based Continuous Affective Tracing System), it can also be independently used for training. Software was built at [NSLab](https://sites.google.com/site/ammuns68), [Department of Cognitive Science](https://www.cgs.iitk.ac.in/user/cgs/cgs/), IIT Kanpur.
+A lightweight researcher friendly web app for familiarising behavioural research participants with a gamepad controller before they begin a main experiment. Built for use alongside [GCATS](https://github.com/pathakdivya/GCATS) (Gamepad-based Continuous Affective Tracing System), it can also be independently used for training.
 
 Participants plug in a controller, walk through a guided orientation, complete an adaptive motion-discrimination task to confirm they can use the thumbstick accurately, and fill out a short comfort questionnaire — all in the browser, with results exportable as CSV.
 
@@ -23,10 +23,9 @@ Continuous affective tracking tasks ask participants to make fine, sustained thu
 
 ## Tech stack
 
-- TypeScript (compiled to ES modules, checked into the repo alongside the compiled `.js`)
-- Vanilla HTML/CSS/JS — no frameworks, no bundler, no `node_modules`
+- Vanilla HTML/CSS/JS
 - Browser [`Gamepad API`](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) for controller input, polled directly via `navigator.getGamepads()` each animation frame rather than relying on the (unreliable) `gamepadconnected` event
-- `localStorage` for in-session persistence; a manual CSV export for handing data off to the experimenter
+- `localStorage` for in-session persistence; a manual CSV export for handing data off to the experimenter.
 
 ## Getting started
 
@@ -44,27 +43,17 @@ No installation or build step is required to run the app — the `.js` files are
 3. Open `http://localhost:8000` in a Chromium-based browser (Chrome or Edge — the Gamepad API's behaviour varies across browsers, and this project has been tested primarily on Edge).
 4. Connect a gamepad and press any button to activate it, then click **Welcome → Start Here** to begin.
 
-### Editing the source
-
-If you need to change behaviour, edit the `.ts` files, not the `.js` files directly — the `.js` files are compiled output and will be overwritten. Compile with the TypeScript compiler:
-
-```bash
-tsc --target es2020 --module es2020 *.ts
-```
-
-(Adjust flags to match your `tsconfig.json` if you add one; the project doesn't currently ship with a build config since it was authored without a bundler.)
 
 ## Project structure
 
 ```
 ├── index.html / about.html / stage1.html / stage2.html / stage3.html   # pages
-├── about.ts / stage1.ts / stage2.ts / stage3.ts / storage.ts           # source (edit these)
 ├── about.js / stage1.js / stage2.js / stage3.js / storage.js           # compiled output
 ├── styles.css                                                          # all styling
 └── images/                                                             # controller diagrams, logo
 ```
 
-`storage.ts` is shared across all stages — it defines the data model (`Stage1Progress`, `Stage2Attempt`, `QuestionnaireResponses`, `SessionRecord`) and the CSV export logic.
+`storage.js` is shared across all stages — it defines the data model (`Stage1Progress`, `Stage2Attempt`, `QuestionnaireResponses`, `SessionRecord`) and the CSV export logic.
 
 ## Data & privacy
 
