@@ -397,7 +397,7 @@ function completeNavigation() {
     trainingIntro.hidden = false;
     trainingStages.hidden = false;
     trainingNext.innerHTML =
-        `Press <span class="navigation-key">${names.next}</span> to start Stage 1: About the device`;
+        `Press <span class="navigation-key">${names.next}</span> to start next stage`;
 }
 
 
