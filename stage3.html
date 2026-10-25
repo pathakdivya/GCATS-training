@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCATS — Questionnaire</title>
+
+  <!-- Apply the saved theme immediately (before first paint) to avoid a light/dark flash -->
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
+  </script>
+
+  <!-- Page logic: thumbstick practice steps, gamepad polling, theme toggle -->
+  <script type="module" src="stage3.js"></script>
+
+  <!-- All styling lives in styles.css (the about-page rules are at the end of it). -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="page-about">
+  <div class="neo-shell">
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="neo-topbar">
+
+      <!-- Brand: logo + project name -->
+      <div class="brand" aria-label="GCATS Gamepad Training">
+        <div class="brand-mark">
+          <img src="./images/gcats-logo.svg" alt="" class="brand-logo" aria-hidden="true">
+        </div>
+        <div class="brand-copy">
+          <strong>GCATS</strong>
+          <span>Training protocol</span>
+        </div>
+      </div>
+
+      <!-- Progress trail through the training stages -->
+      <nav class="progress" aria-label="Training progress">
+        <a href="index.html">Welcome</a>
+        <span class="progress-arrow">→</span>
+        <a href="about.html">About Device</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage1.html">Familiarisation</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage2.html">Motion Task</a>
+        <span class="progress-arrow">→</span>
+        <a class="current" href="stage3.html">Questionnaire</a>
+      </nav>
+
+      <!-- Light / dark theme switch; its icon is set by updateThemeButton() in stage3.js -->
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch colour theme">
+      </button>
+    </header>
+
+    <main class="stage-main">
+
+      <!-- LEFT: progress through the questionnaire -->
+      <section class="checklist-panel" aria-labelledby="q-title">
+        <h2 id="q-title">Questionnaire</h2>
+        <p class="task-intro">Almost done. This last page asks about your prior experience and how comfortable the controller felt.</p>
+
+        <div id="no-session-notice" class="task-notice" hidden>
+          We couldn't find a passing Stage 2 attempt. Please complete <a href="stage2.html">Stage 2</a> with an accuracy score of at least 75% before filling out this questionnaire.
+        </div>
+
+        <div id="q-side">
+          <ol id="q-progress" class="checklist-list"></ol>
+          <p class="q-summary">
+            <b>Thumbstick used:</b> <span id="summary-stick">&mdash;</span><br>
+            <b>Best accuracy:</b> <span id="summary-accuracy">&mdash;</span><br>
+            <b>Attempts made:</b> <span id="summary-attempts">&mdash;</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- RIGHT: one question at a time -->
+      <section class="practice-panel" id="q-panel" aria-live="polite">
+
+        <!-- Only the diagram for the detected brand is shown (chosen by diagram.js) -->
+        <div class="stage-diagram" data-diagrams></div>
+
+        <p class="current-step-label" id="q-label"></p>
+        <p class="current-step-text" id="q-text"></p>
+        <p class="current-step-status" id="q-message"></p>
+
+        <div class="q-body">
+          <div id="q-options" class="q-options"></div>
+          <div id="q-scale" class="q-scale is-unset" hidden>
+            <output id="q-scale-value" class="q-scale-value">&mdash;</output>
+            <input id="q-range" type="range" min="0" max="100" step="5" value="50" aria-labelledby="q-text">
+            <div class="q-scale-ends"><span id="q-scale-low"></span><span id="q-scale-high"></span></div>
+          </div>
+          <input id="q-line" class="q-input" type="text" placeholder="e.g. P01" autocomplete="off" hidden>
+          <textarea id="q-area" class="q-input q-area" placeholder="Optional&hellip;" hidden></textarea>
+        </div>
+
+        <p class="stick-note" id="q-hint"></p>
+        <div class="rdm-result-actions q-actions">
+          <button type="button" class="calibration-btn-secondary" id="q-back">&larr; Back</button>
+          <button type="button" class="calibration-btn" id="q-next">Next &rarr;</button>
+        </div>
+
+        <!-- Review: covers the right panel before submitting -->
+        <div class="rdm-complete q-review" id="q-review" hidden>
+          <h2>Review Your Responses</h2>
+          <div id="review-content" class="review-grid"></div>
+          <p class="final-prompt" id="review-prompt"></p>
+          <div class="rdm-result-actions">
+            <button type="button" class="calibration-btn-secondary" id="edit-btn">Edit Responses</button>
+            <button type="button" class="calibration-btn" id="submit-btn">Submit and Save Data</button>
+          </div>
+        </div>
+
+        <!-- Saved -->
+        <div class="rdm-complete" id="q-saved" hidden>
+          <h2>&#10003; Your data has been saved.</h2>
+          <p>Thank you for taking part.</p>
+          <p class="final-prompt" id="saved-prompt"></p>
+          <a href="index.html" class="calibration-btn" style="text-decoration:none; display:inline-block;">Return to Welcome Page &rarr;</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+</body>
+
+</html>

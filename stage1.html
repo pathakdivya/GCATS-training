@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCATS — Familiarisation</title>
+
+  <!-- Apply the saved theme immediately (before first paint) to avoid a light/dark flash -->
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
+  </script>
+
+  <!-- Page logic: thumbstick practice steps, gamepad polling, theme toggle -->
+  <script type="module" src="stage1.js"></script>
+
+  <!-- All styling lives in styles.css (the about-page rules are at the end of it). -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="page-about">
+  <div class="neo-shell">
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="neo-topbar">
+
+      <!-- Brand: logo + project name -->
+      <div class="brand" aria-label="GCATS Gamepad Training">
+        <div class="brand-mark">
+          <img src="./images/gcats-logo.svg" alt="" class="brand-logo" aria-hidden="true">
+        </div>
+        <div class="brand-copy">
+          <strong>GCATS</strong>
+          <span>Training protocol</span>
+        </div>
+      </div>
+
+      <!-- Progress trail through the training stages -->
+      <nav class="progress" aria-label="Training progress">
+        <a href="index.html">Welcome</a>
+        <span class="progress-arrow">→</span>
+        <a href="about.html">About Device</a>
+        <span class="progress-arrow">→</span>
+        <a class="current" href="stage1.html">Familiarisation</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage2.html">Motion Task</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage3.html">Questionnaire</a>
+      </nav>
+
+      <!-- Light / dark theme switch; its icon is set by updateThemeButton() in stage1.js -->
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch colour theme">
+      </button>
+    </header>
+
+    <main class="stage-main">
+
+      <!-- LEFT: the checklist. stage1.js fills it in and ticks steps off as they are completed. -->
+      <section class="checklist-panel" aria-labelledby="checklist-title">
+        <h2 id="checklist-title">Checklist</h2>
+        <ol id="checklist-list" class="checklist-list"></ol>
+        <!-- Shown under the checklist when the practice is finished; the text is set by stage1.js -->
+        <p id="final-prompt" class="final-prompt" hidden></p>
+      </section>
+
+      <!-- RIGHT: a small picture of the controller, the current instruction, and the practice circle -->
+      <section class="practice-panel" aria-live="polite">
+
+        <!-- Only the diagram for the detected brand is shown (chosen by stage1.js) -->
+        <div class="stage-diagram" data-diagrams></div>
+
+        <p class="current-step-label">Current step</p>
+        <p id="current-step-text" class="current-step-text">Connect your controller and press any button.</p>
+        <p id="current-step-status" class="current-step-status"></p>
+
+        <!-- Practice circle: the dot follows the thumbstick. The target ring is drawn here during target practice. -->
+        <div class="stick-pad">
+          <svg viewBox="-100 -100 200 200" role="img" aria-label="Practice circle showing where your thumbstick is">
+            <circle class="pad-ring" cx="0" cy="0" r="96"></circle>
+            <line class="pad-cross" x1="-96" y1="0" x2="96" y2="0"></line>
+            <line class="pad-cross" x1="0" y1="-96" x2="0" y2="96"></line>
+            <circle id="pad-target" class="pad-target" cx="0" cy="0" r="14" hidden></circle>
+            <circle id="pad-dot" class="pad-dot" cx="0" cy="0" r="6"></circle>
+          </svg>
+        </div>
+        <p id="stick-note" class="stick-note"></p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+</body>
+
+</html>

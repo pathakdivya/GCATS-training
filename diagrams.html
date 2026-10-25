@@ -1,0 +1,115 @@
+<!-- The small controller pictures (Xbox and PlayStation) used on the About page and stages 1 to 3.
+     diagram.js loads this file into every element marked data-diagrams and shows the one for the detected brand. -->
+<div id="about-diagram-xbox" class="controller-diagram is-hidden">
+  <svg aria-label="Xbox gamepad visualisation" id="about-xbox-viz" role="img"
+       viewBox="-25 -15 630 615" preserveAspectRatio="xMidYMid meet">
+
+  <!-- Controller body outline -->
+  <path class="gp-base" d="M505.765,151.733c-16.255-10.392-4.528-16.329-21.353-29.193c-16.824-12.864-85.104-34.639-96.983-24.743 s-25.233,11.873-25.233,11.873h-72.112h-0.122h-72.118c0,0-13.36-1.977-25.233-11.873c-11.873-9.896-80.16,11.873-96.983,24.743 c-16.824,12.864-5.098,18.801-21.353,29.193C58.02,162.125,15.467,305.619,15.467,305.619s-55.417,159.824,43.544,179.12 c0,0,24.248-15.336,45.025-40.079c20.784-24.743,61.353-59.872,83.128-60.368c21.298-0.483,99.389-0.019,102.792,0l0,0 c0,0,0.024,0,0.061,0c0.043,0,0.062,0,0.062,0l0,0c3.403-0.019,81.494-0.483,102.792,0c21.769,0.496,62.345,35.625,83.128,60.368 s45.024,40.079,45.024,40.079c98.961-19.296,43.544-179.12,43.544-179.12S522.02,162.125,505.765,151.733z"></path>
+
+  <!-- Bumpers (LB / RB) and their labels -->
+  <rect class="gp-part" height="22" id="about-xbox-lb" rx="12" ry="12" width="92" x="118" y="68"></rect>
+  <rect class="gp-part" height="22" id="about-xbox-rb" rx="12" ry="12" width="92" x="370" y="68"></rect>
+
+  <!-- Left trigger (LT): background box + fill bar (height set by JS) -->
+  <g>
+    <rect fill="rgba(255,255,255,.25)" height="30" rx="10" stroke="#111827" stroke-width="2" width="68" x="118" y="32"></rect>
+    <rect class="triggerFill" height="0" id="about-xbox-lt" rx="8" width="62" x="121" y="62"></rect>
+    <!-- <text class="gp-text" text-anchor="middle" x="152" y="51">LT</text> -->
+  </g>
+
+  <!-- Right trigger (RT): background box + fill bar (height set by JS) -->
+  <g>
+    <rect fill="rgba(255,255,255,.25)" height="30" rx="10" stroke="#111827" stroke-width="2" width="68" x="394" y="32"></rect>
+    <rect class="triggerFill" height="0" id="about-xbox-rt" rx="8" width="62" x="397" y="62"></rect>
+    <!-- <text class="gp-text" text-anchor="middle" x="428" y="51">RT</text> -->
+  </g>
+
+  <!-- Back (View) and Start (Menu) buttons with arrow labels -->
+  <rect class="gp-part" height="18" id="about-xbox-back" rx="7" width="30" x="246" y="140"></rect>
+  <rect class="gp-part" height="18" id="about-xbox-start" rx="7" width="30" x="350" y="140"></rect>
+
+  <!-- Decorative centre pieces (not mapped to inputs) -->
+  <rect class="gp-part" height="5" rx="7" width="15" x="300" y="155"></rect>
+  <rect class="gp-part" height="5" rx="7" width="15" x="303" y="220"></rect>
+  <rect class="gp-part" height="18" rx="7" width="30" x="295" y="350"></rect>
+
+  <text class="gp-text" text-anchor="middle" x="261" y="152">&#x2190;</text>
+  <text class="gp-text" text-anchor="middle" x="367" y="152">&#x2192;</text>
+
+  <!-- Xbox guide button with logo -->
+  <g>
+    <circle class="gp-part" cx="310" cy="188" id="about-xbox-center" r="18"></circle>
+    <g transform="translate(295,173) scale(0.9)">
+      <path d="M16 5.425c-1.888-1.125-4.106-1.922-6.473-2.249l-0.092-0.010c-0.070-0.005-0.152-0.008-0.234-0.008-0.613 0-1.188 0.16-1.687 0.441l0.017-0.009c2.357-1.634 5.277-2.61 8.426-2.61 0.008 0 0.016 0 0.024 0h0.019c0.005 0 0.011 0 0.018 0 3.157 0 6.086 0.976 8.501 2.642l-0.050-0.033c-0.478-0.272-1.051-0.433-1.662-0.433-0.085 0-0.169 0.003-0.252 0.009l0.011-0.001c-2.459 0.336-4.677 1.13-6.648 2.297l0.082-0.045zM5.554 5.268c-0.041 0.014-0.077 0.032-0.11 0.054l0.002-0.001c-2.758 2.723-4.466 6.504-4.466 10.684 0 3.584 1.256 6.875 3.353 9.457l-0.022-0.028c-1.754-3.261 4.48-12.455 7.61-16.159-3.53-3.521-5.277-4.062-6.015-4.062-0.010-0-0.021-0.001-0.032-0.001-0.115 0-0.225 0.021-0.326 0.060l0.006-0.002zM20.083 9.275c3.129 3.706 9.367 12.908 7.605 16.161 2.075-2.554 3.332-5.845 3.332-9.43 0-4.181-1.709-7.962-4.467-10.684l-0.002-0.002c-0.029-0.021-0.063-0.039-0.1-0.052l-0.003-0.001c-0.1-0.036-0.216-0.056-0.336-0.056-0.005 0-0.011 0-0.016 0h0.001c-0.741-0-2.485 0.543-6.014 4.063zM6.114 27.306c2.627 2.306 6.093 3.714 9.888 3.714s7.261-1.407 9.905-3.728l-0.017 0.015c2.349-2.393-5.402-10.901-9.89-14.29-4.483 3.39-12.24 11.897-9.886 14.29z" fill="#107C10"></path>
+    </g>
+  </g>
+
+  <!-- Left stick (LS): ring, dead zone, moving dot, label -->
+  <g id="about-xbox-ls-group">
+    <circle class="stickRing" cx="182" cy="190" r="42"></circle>
+    <circle class="stickDead" cx="182" cy="190" r="25"></circle>
+    <circle class="stickDot" cx="182" cy="190" id="about-xbox-ls-dot" r="23"></circle>
+    <!-- <text class="stickLabel" x="182" y="248">LS</text> -->
+  </g>
+
+  <!-- D-pad: cross-shaped base -->
+  <circle class="dpad-ring" cx="216" cy="305" r="37"></circle>
+  <path class="gp-part" d="M224.771,293.343v-22.454h-18.115v22.454c0,1.689-1.371,3.061-3.06,3.061h-22.448v18.114h22.448 c1.689,0,3.06,1.371,3.06,3.061v22.454h18.115v-22.454c0-1.689,1.371-3.061,3.06-3.061h22.448v-18.114h-22.448 C226.142,296.403,224.771,295.032,224.771,293.343z"></path>
+
+  <!-- D-pad: transparent overlays that light up per direction -->
+  <rect class="dpad-dir" fill="transparent" height="24.8" id="about-xbox-dpad-up" pointer-events="none" rx="2" width="17.8" x="206.8" y="271.2"></rect>
+  <rect class="dpad-dir" fill="transparent" height="24.8" id="about-xbox-dpad-down" pointer-events="none" rx="2" width="17.8" x="206.8" y="317.5"></rect>
+  <rect class="dpad-dir" fill="transparent" height="17.5" id="about-xbox-dpad-left" pointer-events="none" rx="2" width="24.8" x="181.5" y="296.7"></rect>
+  <rect class="dpad-dir" fill="transparent" height="17.5" id="about-xbox-dpad-right" pointer-events="none" rx="2" width="24.8" x="228" y="296.7"></rect>
+
+  <!-- Face buttons (Y top, X left, B right, A bottom) and labels -->
+  <circle class="gp-part" cx="450" cy="164" id="about-xbox-y" r="17"></circle>
+  <circle class="gp-part" cx="413" cy="201" id="about-xbox-x" r="17"></circle>
+  <circle class="gp-part" cx="487" cy="201" id="about-xbox-b" r="17"></circle>
+  <circle class="gp-part" cx="450" cy="238" id="about-xbox-a" r="17"></circle>
+  <text class="gp-text" text-anchor="middle" x="450" y="168">Y</text>
+  <text class="gp-text" text-anchor="middle" x="413" y="205">X</text>
+  <text class="gp-text" text-anchor="middle" x="487" y="205">B</text>
+  <text class="gp-text" text-anchor="middle" x="450" y="242">A</text>
+  
+  <!-- Right stick (RS): ring, dead zone, moving dot, label -->
+  <g id="about-xbox-rs-group">
+    <circle class="stickRing" cx="396" cy="295" r="42"></circle>
+    <circle class="stickDead" cx="396" cy="295" r="25"></circle>
+    <circle class="stickDot" cx="396" cy="295" id="about-xbox-rs-dot" r="23"></circle>
+    <!-- <text class="stickLabel" x="396" y="353">RS</text> -->
+  </g>
+  </svg>
+</div>
+<div id="about-diagram-playstation" class="controller-diagram is-hidden">
+  <!-- Controller body -->
+  <svg aria-label="PlayStation controller visualisation" class="controller-svg ps-controller-svg" data-name="Layer 1" id="about-playstation-viz" role="img" viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg"><g><path class="ps-body" d="M88.85,24.18a3,3,0,0,0-1-1.4,3,3,0,0,0-1.14-.39l-.31-.06V21.08S83.06,18.87,81,18.56s-6.73-.67-7.07,0a5.53,5.53,0,0,0-.37,1.67c-1.54-.2-3.09-.38-4.63-.55a2,2,0,0,0-.71-.36,18.91,18.91,0,0,0-3.55-.54l-2.77-.13-5.82-.26H43.93l-5.81.26-2.77.13a19.11,19.11,0,0,0-3.56.54,1.88,1.88,0,0,0-.69.36c-1.55.17-3.1.35-4.65.55a5.24,5.24,0,0,0-.37-1.67c-.33-.67-5-.31-7.06,0s-5.45,2.52-5.45,2.52v1.25l-.32.06a3,3,0,0,0-1.13.39,3.13,3.13,0,0,0-1,1.4C4.82,38.42.68,54,2.12,69.52c.33,3.64,1.17,7.59,4,9.88a11.5,11.5,0,0,0,6.17,2.16,20,20,0,0,0,2.26.26,2,2,0,0,0,.91-.17c.65-.36.9-1.56,1.19-2.19.59-1.27,1.18-2.54,1.75-3.82,1.1-2.5,2.13-5,3-7.6a27.82,27.82,0,0,1,2-4.93,9.85,9.85,0,0,1,.95-1.37l.11-.13a8.63,8.63,0,0,1,3.1-2.09h0a8.82,8.82,0,0,1,2.46-.29h.33l1.07,0,1.62.24a66.62,66.62,0,0,0,8.6.12H58.27a66.67,66.67,0,0,0,8.6-.12c.54-.07,1.07-.16,1.61-.24l1.08,0h.32a8.93,8.93,0,0,1,2.47.29h0a8.55,8.55,0,0,1,3.1,2.09l.12.14a9.2,9.2,0,0,1,1,1.36,27.82,27.82,0,0,1,2,4.93c.9,2.58,1.93,5.1,3,7.6.57,1.28,1.15,2.55,1.74,3.82.29.63.54,1.83,1.2,2.19a2,2,0,0,0,.9.17,19.46,19.46,0,0,0,2.26-.26,11.47,11.47,0,0,0,6.17-2.16c2.86-2.29,3.69-6.24,4-9.88C99.32,54,95.17,38.42,88.85,24.18ZM31.56,20.64a.84.84,0,0,1,.51-.36,18.46,18.46,0,0,1,3.32-.5l2.78-.13,5.76-.26H56.06l5.78.26,2.77.13a18.25,18.25,0,0,1,3.31.5.84.84,0,0,1,.51.36,4.49,4.49,0,0,1,.24,2.58c0,.2-.24,1.66-2.24,10.72l-.11.5c-.17,1.06-1,4.51-4,4.64H37.75c-3.1-.13-3.9-3.58-4.08-4.66,0,0,0-.21-.11-.51-1.93-8.72-2.22-10.44-2.23-10.73A4.41,4.41,0,0,1,31.56,20.64Zm3,34.5a5.61,5.61,0,1,1,5.61-5.61A5.61,5.61,0,0,1,34.58,55.14ZM46,42.42a.56.56,0,1,1,.56.56A.56.56,0,0,1,46,42.42Zm1.4,2.09A.56.56,0,1,1,47.9,44,.56.56,0,0,1,47.35,44.51Zm4-.56a.56.56,0,1,1-.55-.56A.56.56,0,0,1,51.39,44Zm-.27-1.53a.56.56,0,1,1,.56.56A.56.56,0,0,1,51.12,42.42ZM50,43a.56.56,0,1,1,.56-.56A.56.56,0,0,1,50,43Zm-.27,1a.56.56,0,1,1-.56-.56A.56.56,0,0,1,49.72,44Zm-1.4-1a.56.56,0,1,1,.56-.56A.56.56,0,0,1,48.32,43ZM52,55.12c-.15,0-2,0-2,0s-1.82,0-2,0-.27-.28-.27-.52.2-.46.32-.46h3.83c.13,0,.32.23.32.46S52.12,55.09,52,55.12Zm.68-10.61a.56.56,0,1,1,.56-.56A.56.56,0,0,1,52.65,44.51ZM53.49,43a.56.56,0,1,1,.56-.56A.56.56,0,0,1,53.49,43ZM65.41,55.14A5.61,5.61,0,1,1,71,49.53,5.61,5.61,0,0,1,65.41,55.14ZM96.89,69.42c-.3,3.16-1,7-3.66,9.2a8.71,8.71,0,0,1-3.79,1.66,6.19,6.19,0,0,1-.53-.75,10.12,10.12,0,0,1-.6-1.53c-.33-.88-.71-1.78-1-2.69-.11-.42-2.2-7-2.45-7.5s-2-4.86-2.33-5.5-2.64-5.81-2.83-6.19a61.52,61.52,0,0,0-7.07-11.59c-1.68-2-4.31-4.18-4.85-6.89-.11-.55-.28-2.5-.28-2.5a11.33,11.33,0,0,1-.64,2.53,12.94,12.94,0,0,1-1.63,1.95,6.53,6.53,0,0,1-2.48,1.25c-.77,0-12.8,0-12.8,0s-12,0-12.81,0a6.48,6.48,0,0,1-2.47-1.25,12.37,12.37,0,0,1-1.64-1.95,11.92,11.92,0,0,1-.64-2.53s-.16,2-.28,2.5c-.54,2.71-3.16,4.85-4.84,6.89a61,61,0,0,0-7.07,11.59c-.2.38-2.56,5.55-2.84,6.19s-2.08,5-2.33,5.5-2.33,7.08-2.44,7.5c-.25.91-.63,1.81-1,2.69a11.3,11.3,0,0,1-.6,1.53,6.19,6.19,0,0,1-.53.75,8.65,8.65,0,0,1-3.79-1.66c-2.69-2.15-3.37-6-3.66-9.2-1.25-13.54,1.75-28.63,9-44.84a2.28,2.28,0,0,1,.61-1,2.56,2.56,0,0,1,.78-.24c5.59-1.12,11.29-2,17-2.61a7.35,7.35,0,0,0-.1,2.46c0,.31.23,1.77,2.25,10.91.07.29.11.47.11.48.53,3.26,2.45,5.36,5,5.47H62.29c2.56-.11,4.48-2.21,5-5.45,0,0,0-.2.11-.48,2-9.16,2.26-10.62,2.26-10.89a7.86,7.86,0,0,0-.1-2.5c5.69.62,11.38,1.49,17,2.61a2.41,2.41,0,0,1,.77.24,2.38,2.38,0,0,1,.62,1C95.13,40.79,98.15,55.88,96.89,69.42Z"/></g>
+  <!-- Face buttons (square, triangle, circle, cross) -->
+  <g data-name="buttons right">
+  <circle class="ps-part ps-face-button" cx="72.91" cy="36.3" id="square" r="3.28"/>
+  <circle class="ps-part ps-face-button" cx="80.02" cy="29.24" id="triangle" r="3.27"/>
+  <circle class="ps-part ps-face-button" cx="87.08" cy="36.23" id="circle" r="3.21"/>
+  <circle class="ps-part ps-face-button" cx="80.03" cy="43.32" id="cross" r="3.28"/></g>
+  <!-- Left stick -->
+  <g class="ps-stick-group" data-name="thumbstick-left" id="visual-stick-left-circle">
+  <circle class="ps-stick-dot" cx="35" cy="50" id="visual-stick-left" r="4"/></g>
+  <!-- Right stick -->
+  <g class="ps-stick-group" data-name="thumbstick-right" id="visual-stick-right-circle">
+  <circle class="ps-stick-dot" cx="65" cy="49" id="visual-stick-right" r="4"/></g>
+  <!-- Share / Options buttons -->
+  <g data-name="Start buttons"><path class="ps-part ps-center-button" d="M72.42,23.47a.86.86,0,0,0-.42.19,1.66,1.66,0,0,0-.32.55,9.1,9.1,0,0,0-.48,3c.2.74.76.71.76.71a2.3,2.3,0,0,0,.8,0,1,1,0,0,0,.51-.55,16.77,16.77,0,0,0,.41-1.84,5.77,5.77,0,0,0,.14-1.45C73.75,24,73.64,23.47,72.42,23.47Z" id="options"/><path class="ps-part ps-center-button" d="M27.58,23.47a.86.86,0,0,1,.42.19,1.66,1.66,0,0,1,.32.55,9.36,9.36,0,0,1,.48,3C28.6,28,28,28,28,28a2.31,2.31,0,0,1-.8,0,1,1,0,0,1-.51-.55,16.77,16.77,0,0,1-.41-1.84,5.32,5.32,0,0,1-.14-1.45C26.25,24,26.36,23.47,27.58,23.47Z" id="share"/></g>
+  <!-- D-pad -->
+  <g data-name="Directional buttons">
+  <path class="ps-part ps-dpad" d="M21.72,28.06c-.5,0-1.72,0-1.72,0s-1.22,0-1.72,0-1.22.87-1.22,1.26v3.17c0,.42,2.36,2.78,2.39,2.81a1.37,1.37,0,0,0,.27,0h.56a1.37,1.37,0,0,0,.27,0s2.39-2.39,2.39-2.81V29.32C22.94,28.93,22.22,28.05,21.72,28.06Z" id="dpad-up"/>
+  <path class="ps-part ps-dpad" d="M21.72,44.48H18.28c-.5,0-1.22-.87-1.22-1.26V40.05c0-.42,2.36-2.79,2.39-2.81a1.37,1.37,0,0,1,.27,0h.56a1.37,1.37,0,0,1,.27,0s2.39,2.39,2.39,2.81v3.17C22.94,43.61,22.22,44.49,21.72,44.48Z" id="dpad-down"/>
+  <path class="ps-part ps-dpad" d="M28.21,38c0-.5,0-1.72,0-1.72s0-1.22,0-1.72-.87-1.22-1.26-1.22H23.78c-.42,0-2.79,2.36-2.81,2.39A1.37,1.37,0,0,0,21,36v.56a1.37,1.37,0,0,0,0,.27s2.39,2.39,2.81,2.39H27C27.34,39.21,28.22,38.49,28.21,38Z" id="dpad-right"/>
+  <path class="ps-part ps-dpad" d="M11.79,38c0-.5,0-1.72,0-1.72s0-1.22,0-1.72.87-1.22,1.26-1.22h3.17c.42,0,2.79,2.36,2.81,2.39a1.37,1.37,0,0,1,0,.27v.56a1.37,1.37,0,0,1,0,.27s-2.39,2.39-2.81,2.39H13.05C12.66,39.21,11.78,38.49,11.79,38Z" id="dpad-left"/></g>
+  <!-- Shoulder buttons (L1/R1) and triggers (L2/R2) -->
+  <g id="ps-shoulder-controls" pointer-events="none">
+  <path class="ps-shoulder-input ps-trigger-input" d="M14.2 20.9 C15.6 19.9 18.4 18.7 21.0 18.4 C23.0 18.2 25.4 18.2 26.1 18.7 C26.5 19.1 26.6 20.0 26.5 20.8 C22.4 21.3 18.3 22.0 14.2 22.8 Z" id="l2"/>
+  <path class="ps-shoulder-input ps-trigger-input" d="M73.9 18.7 C74.6 18.2 77.0 18.2 79.0 18.4 C81.6 18.7 84.4 19.9 85.8 20.9 L85.8 22.8 C81.7 22.0 77.6 21.3 73.5 20.8 C73.4 20.0 73.5 19.1 73.9 18.7 Z" id="r2"/>
+  <path class="ps-shoulder-input" d="M13.3 22.4 C17.5 21.5 21.8 20.8 26.4 20.3 L27.1 23.1 C22.4 23.7 17.7 24.6 12.5 25.8 C12.7 24.5 12.9 23.4 13.3 22.4 Z" id="l1"/>
+  <path class="ps-shoulder-input" d="M73.6 20.3 C78.2 20.8 82.5 21.5 86.7 22.4 C87.1 23.4 87.3 24.5 87.5 25.8 C82.3 24.6 77.6 23.7 72.9 23.1 Z" id="r1"/>
+  </g></svg>
+</div>

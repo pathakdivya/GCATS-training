@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCATS — About Device</title>
+
+  <!-- Apply the saved theme immediately (before first paint) to avoid a light/dark flash -->
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
+  </script>
+
+  <!-- Page logic: controller selection, gamepad polling, theme toggle -->
+  <script type="module" src="about.js"></script>
+
+  <!-- All styling lives in styles.css (the about-page rules are at the end of it). -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="page-about">
+  <div class="neo-shell">
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="neo-topbar">
+
+      <!-- Brand: logo + project name -->
+      <div class="brand" aria-label="GCATS Gamepad Training">
+        <div class="brand-mark">
+          <img src="./images/gcats-logo.svg" alt="" class="brand-logo" aria-hidden="true">
+        </div>
+        <div class="brand-copy">
+          <strong>GCATS</strong>
+          <span>Training protocol</span>
+        </div>
+      </div>
+
+      <!-- Progress trail through the training stages -->
+      <nav class="progress" aria-label="Training progress">
+        <a href="index.html">Welcome</a>
+        <span class="progress-arrow">→</span>
+        <a class="current about-progress-half" href="about.html">About Device</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage1.html">Familiarisation</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage2.html">Motion Task</a>
+        <span class="progress-arrow">→</span>
+        <a href="stage3.html">Questionnaire</a>
+      </nav>
+
+      <!-- Light / dark theme switch; its icon is set by updateThemeButton() in about.js -->
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch colour theme">
+      </button>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="about-panel">
+
+      <div class="about-copy">
+        <div class="about-pages">
+          <section class="about-page" data-about-page="1">
+            <h3>What am I holding?</h3>
+            <p class="about-copy-text">
+              You're holding a gamepad which is a handheld device with two
+              thumbsticks and several buttons. Each part sends its own signal to the computer, so
+              that the computer can read exactly how far a stick is tilted or which buttons are pressed.
+              You can press any button or move either stick to see the controller respond in the illustration on the right.
+            </p>
+
+            <h3>Important components:</h3>
+            <ul class="about-component-list">
+              <li><b>Thumbsticks</b> &mdash; two small joysticks, you can tilt in any direction.</li>
+              <li><b>Shoulder buttons</b> &mdash; sitting along the top edge under your index fingers.</li>
+            </ul>
+
+            <h3>How to hold it?</h3>
+            <p class="about-copy-text">
+            In the upcoming page you will see two ways you can hold the controller for our experiment. You can choose between the two options based on your comfort. The choice you make will be used throughout the remaining stages.
+          </section>
+
+          <section class="about-page is-hidden" data-about-page="2">
+            <!-- grip.png from the detected brand's image folder; set by about.js -->
+            <img id="grip-image" class="grip-comparison" src="" alt="" hidden>
+
+            <div class="rdm-setup-panel">
+              <h3>So, which thumbstick would you like to use?</h3>
+              <p class="rdm-field-label">Your choice will be used throughout the familiarisation and task stages. Use the D-pad left and right to choose a thumbstick.</p>
+              <div class="rdm-choice-row">
+                <button type="button" class="rdm-choice-btn" data-stick="left">Left Thumbstick</button>
+                <button type="button" class="rdm-choice-btn" data-stick="right">Right Thumbstick</button>
+              </div>
+              <p class="rdm-setup-hint" id="stick-setup-hint"></p>
+            </div>
+
+            <!-- The button name (B or Circle) is set by about.js -->
+            <a class="neo-button" href="stage1.html">Press B to move to the next stage →</a>
+          </section>
+        </div>
+        <div class="about-page-indicator" id="about-page-indicator">Page 1 of 2 · D-pad down for the next page</div>
+      </div>
+
+      <section class="visualizer-panel" aria-labelledby="visualizer-title">
+        <div class="visualizer-heading-row">
+          <h1 id="visualizer-title" class="visualizer-title">See in Action!</h1>
+          <div class="visualizer-note">
+            The diagram will respond to your gamepad's movements.
+          </div>
+        </div>
+
+        <!-- Stage: the diagram for the detected controller brand (chosen automatically by about.js) -->
+        <section class="controller-stage" aria-live="polite">
+
+        <!-- Empty state (shown only until a controller brand is known) -->
+        <div id="controller-empty-state" class="controller-empty-state">
+          <strong>Waiting for your controller.</strong>
+          Press any button on the gamepad and its diagram will appear here.
+        </div>
+
+        <!-- ---------- Xbox diagram ---------- -->
+        <div class="diagrams-slot" data-diagrams></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+</body>
+
+</html>
