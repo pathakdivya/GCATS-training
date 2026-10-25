@@ -1,91 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamepad Training Protocol</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/logo-transp.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCATS Training</title>
+
+  <!-- Page styling -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Applies the saved light or dark theme  -->
+  <script>document.documentElement.dataset.theme = localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';</script>
+  
+  <!-- Loading index.js -->
+  <script type="module" src="index.js"></script>
 </head>
 <body>
-    <div class="main-container">
-    <div class="container">
-        <nav class="stage-nav" aria-label="Training progress">
-            <a class="stage-pill current" href="index.html">Welcome</a>
-            <span class="stage-nav-arrow">&rarr;</span>
-            <a class="stage-pill upcoming" href="about.html">About the Device</a>
-            <span class="stage-nav-arrow">&rarr;</span>
-            <a class="stage-pill upcoming" href="stage1.html">Controller Familiarisation</a>
-            <span class="stage-nav-arrow">&rarr;</span>
-            <a class="stage-pill upcoming" href="stage2.html">Random Dot Motion Task</a>
-            <span class="stage-nav-arrow">&rarr;</span>
-            <a class="stage-pill upcoming" href="stage3.html">Questionnaire</a>
-        </nav>
-        <header>
-            <h1>Let's learn to handle Gamepads! 🎮</h1>
-            <p>A guided warm-up that familiarises you with the controller.</p>
-        </header>
 
-        <main>
-            <div class="welcome-hero">
-                <span class="eyebrow">Before you begin</span>
-                <p>
-                    Plug in a gamepad and press any button to activate it in your browser. Each stage takes
-                    a few minutes. Complete each stage in order, and take breaks if you need to. 
-                </p>
-            </div>
 
-            <div class="stage-cards">
-                <a class="stage-card" href="about.html">
-                    <h2>About the Device</h2>
-                    <p>
-                        A quick introduction to the controller: its main components, how to hold it
-                        comfortably.
-                    </p>
-                    <span class="stage-card-cta">Start Here &rarr;</span>
-                </a>
+  <div class="page-shell">
 
-                <a class="stage-card" href="stage1.html">
-                    <h2>Controller Familiarisation</h2>
-                    <p>
-                        A guided checklist walks you through handling parts of the controller.
-                    </p>
-                    <ul>
-                        <li>Step-by-step guided checklist</li>
-                        <li>Live visual feedback</li>
-                    </ul>
-                    <span class="stage-card-cta">Start Stage 1 &rarr;</span>
-                </a>
-
-                <a class="stage-card" href="stage2.html">
-                    <h2>Random Dot Motion Task</h2>
-                    <p>
-                        Watch a field of moving dots and tilt your thumbstick in the direction most of them
-                        are drifting. Difficulty adapts automatically to your performance.
-                    </p>
-                    <span class="stage-card-cta">Start Stage 2 &rarr;</span>
-                </a>
-
-                <a class="stage-card" href="stage3.html">
-                    <h2>Questionnaire</h2>
-                    <p>
-                        A short hardware comfort &amp; familiarity questionnaire.
-                    </p>
-                    <span class="stage-card-cta">Start Questionnaire &rarr;</span>
-                </a>
-            </div>
-
-            <p class="welcome-note">
-                If you have any questions, please contact your Experimentor immediately. Your data is only saved once you submit the final
-                questionnaire.
-            </p>
-        </main>
-    </div>
-    </div>
-    <footer class="site-footer" role="contentinfo">
-        <div class="footer-inner">
-            <p>&copy; 2026 Designed by divya@NSLab • <a href="https://github.com/pathakdivya" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-        </div>
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p class="note"><strong>Need help?</strong> Contact the experimenter</p>
+      <div>Designed by Divya Pathak © 2026</div>
     </footer>
+
+    <div class="neo-shell">
+
+      <!-- Header elements -->
+      <div class="neo-topbar">
+        <div class="brand" aria-label="GCATS Gamepad Training">
+          <div class="brand-mark">
+            <img
+              src="./images/gcats-logo.svg"
+              alt=""
+              class="brand-logo"
+              aria-hidden="true"
+            />
+          </div>
+          <div class="brand-copy">
+            <strong>GCATS</strong>
+            <span>Training protocol</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          
+          <!-- Debug helper, mouse only.
+               Visible from the connected screen until the practice ends. -->
+          <button id="skip-step" class="skip-step" type="button" tabindex="-1" hidden>Skip this step</button>
+          
+          <!-- Icon is updated by updateThemeButton() in index.js -->
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Switch colour theme">
+          </button>
+        </div>
+      </div>
+
+      <!-- WELCOME: full-page overlay until full screen and a controller are ready -->
+        <section id="welcome-prompt" class="welcome-prompt" role="dialog" aria-modal="true" aria-labelledby="welcome-prompt-heading">
+        <div class="welcome-prompt-card">
+          <h2 id="welcome-prompt-heading">Welcome!</h2>
+          <p>Please click on F11 to go full screen.</p>
+          <p>Connect your controller to start the GCATS training protocol.</p>
+          <p class="note"><strong>Connect a controller, then press any button.</strong></p>
+        </div>
+      </section>
+
+      <!-- Gamepad !!! -->
+      <main>
+        <div id="training-content" hidden>
+          <section class="hero-grid">
+            
+            <!-- Controller card -->
+            <section class="gamepad-card" id="gamepad-welcome" aria-live="polite" aria-atomic="true">
+              <div class="status-row">
+                <div>
+                  <div id="status-badge" class="status-badge"><span class="status-dot"></span><span id="status-text">Not connected</span></div>
+                  <p id="gamepad-name" class="device-id"></p>
+                </div>
+              </div>
+
+              <!-- If Unknown brand: the participant picks their controller layout-->
+              <div id="gamepad-unknown" class="state" hidden>
+                <h2>Which layout matches?</h2>
+                <p>Your gamepad is connected, but we cannot confidently identify its layout. Choose the controller that looks like yours.</p>
+                <div class="layout-grid">
+                  <button id="choose-xbox" class="layout-choice" type="button" aria-label="Use Xbox controller layout">
+                    <img src="images/Xbox/blank.png" alt="Xbox controller">
+                    <span>XBOX <b aria-hidden="true">→</b></span>
+                  </button>
+                  <button id="choose-playstation" class="layout-choice" type="button" aria-label="Use PlayStation controller layout">
+                    <img src="images/Playstation/blank.png" alt="PlayStation controller">
+                    <span>PLAYSTATION <b aria-hidden="true">→</b></span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- else Recognised brand, parameters set by index.js -->
+              <div id="gamepad-connected" class="state" hidden>
+                <h2 id="connected-heading"></h2>
+                <img id="gamepad-hold-image" class="holding-image" src="" alt="">
+                <p>Press any button on the gamepad to begin.</p>
+              </div>
+
+              <!-- Navigation tutorial -->
+              <section id="navigation-prompt" role="dialog" aria-modal="true" aria-labelledby="navigation-prompt-heading" hidden>
+                <div class="navigation-prompt-card">
+                  <span id="navigation-prompt-heading" class="kicker">Remember these buttons!</span>
+                  <div class="navigation-prompt-grid">
+                    <div class="navigation-prompt-copy">
+                      <img id="navigation-action-image" class="navigation-action-image" src="images/Xbox/d_pad.png" alt="Neon illustration of a gamepad D-pad">
+                      <p id="navigation-action-copy">Press D-pad up or down once. This action is for going to the next page or back to the previous page.</p>
+                      <ul>
+                        <li id="navigation-action-step"><span class="navigation-key">STEP 1 OF 13</span> D-pad up</li>
+                      </ul>
+                      <p id="navigation-practice-status" class="navigation-practice-status">Try: D-pad up.</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </section>
+          </section>
+
+          <!-- Begin Training Introduction card -->
+          <div id="training-intro" class="intro" hidden>
+            <h2>Okay, we are now beginning with the training :)</h2>
+            <h2> A guided training session will follow, which will familiarise you with the gamepad device and how you respond with it.</h2>
+          </div>
+
+          <!-- OVERVIEW: the four stages that follow  -->
+          <section id="training-stages" class="stages" aria-labelledby="training-heading" hidden>
+            <div id="training-heading" class="section-label">What happens next?</div>
+            <div class="stage-grid">
+              <a class="stage-card">
+                <span class="stage-num">Stage 1</span>
+                <h3>About the device</h3>
+                <p>Learn the main controller parts and how they will be used.</p>
+              </a>
+
+              <a class="stage-card">
+                <span class="stage-num">Stage 2</span>
+                <h3>Guided Handling Practice</h3>
+                <p>Practise response using the controller with a guided checklist.</p>
+              </a>
+
+              <a class="stage-card">
+                <span class="stage-num">Stage 3</span>
+                <h3>Small Game</h3>
+                <p>Very short training exercise for improving response using a controller thumbstick</p>
+              </a>
+
+              <a class="stage-card">
+                <span class="stage-num">Stage 4</span>
+                <h3>Questionnaire</h3>
+                <p>Tell us about your prior experience and current level of comfort with the controller.</p>
+              </a>
+            </div>
+            
+            <!-- What to do next; the text is set by completeNavigation() in index.js -->
+            <p id="training-next" class="training-next"></p>
+          </section>
+        </div>
+      </main>
+    </div>
+
+  </div>
 </body>
 </html>
