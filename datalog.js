@@ -16,7 +16,7 @@
    ===================================================================== */
 
 import { LAYOUT_KEY } from "./controller.js";
-import { getStickPreference } from "./storage.js";
+import { getStickPreference, resetParticipantState } from "./storage.js";
 
 const DATA_KEY = "controllercheck_data_v1";
 const EXP_NAME = "GCATS_training";
@@ -75,6 +75,7 @@ function newSession(db) {
     };
     db.sessions[session.id] = session;
     db.currentSessionId = session.id;
+    resetParticipantState();
     return session;
 }
 
