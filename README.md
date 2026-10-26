@@ -8,7 +8,7 @@ Participants plug in a controller, walk through a guided orientation, complete a
 
 ## Why this exists
 
-Continuous affective tracking tasks ask participants to make fine, sustained thumbstick movements — a skill many people don't have going in, especially if they don't game regularly. When attempting to collect continuous data, dropping someone straight into a real trial risks confounding "couldn't operate the controller" with the construct actually being measured. This protocol is a standardised warm-up that helps you train naive participants to handle gamepads or Joysticks.
+Continuous affective tracking tasks ask participants to make fine and sustained thumbstick/Joystick movements. It's a skill many people don't have going in, especially if they don't game regularly. When attempting to collect continuous data, dropping someone straight into a real trial risks confounding a device skill issue and making the data noisy. This protocol is a standardised warm-up that helps you train naive participants to handle gamepads. An added benefit of training the rators on device usage is reducing the rating task load and making it automatic. 
 
 ## Tech stack
 
@@ -57,9 +57,8 @@ All data is stored locally in the participant's browser (`localStorage`) and is 
 
 ## License
 
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
+This project is licensed under the [GNU General Public License v3.0](LICENSE) which also applies to the main GCATS repository.
 
 ## Acknowledgements
-
-Built as part of ongoing research work by Divya Pathak. The controller diagram and connection-detection approach draw on lessons learned adapting [controllercheck.org](https://controllercheck.org). We have not reused their code files.
+ The controller diagram and connection-detection approach draw on lessons learned adapting [controllercheck.org](https://controllercheck.org). We have not reused their code files.
 
