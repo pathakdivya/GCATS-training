@@ -4,11 +4,11 @@
    Part 1: a field of dots moves; most drift one way (up, down, left or
            right). The participant tilts the thumbstick that way. The share
            of dots moving together (coherence) goes down after a correct
-           answer and up after a wrong one (a staircase), for 2 blocks of
-           40 trials. Accuracy of at least 75% is needed to continue.
-   Part 2: follow the target. A target starts in the centre and drifts around
-           the circle while the participant keeps the cursor inside it; when it
-           stops they lock their position with a shoulder button.
+           answer and up after a wrong one (a staircase), for 15 trials.
+           Accuracy of at least 75% is needed to continue.
+   Part 2: follow the target, 20 trials. A target starts in the centre and drifts
+           around the circle while the participant keeps the cursor inside it;
+           when it stops they lock their position with a shoulder button.
 
    The file is ordered: settings, page elements, the state, the dot field,
    Part 1, Part 2, results, input, the frame loop, then start-up.
@@ -16,7 +16,7 @@
 
 import { BUTTON_NAMES, CONTINUE_BUTTON, firstConnectedGamepad, keyboardInput, REPEAT_BUTTON } from "./controller.js";
 import { autoDetect, drawDiagramStick, getLayout, loadDiagrams, SHOULDER_BUTTONS, showSavedDiagram } from "./diagram.js";
-import { ensureSession, logRow } from "./datalog.js";
+import { ensureSession, logRow, logRows } from "./datalog.js";
 import { initThemeToggle } from "./theme.js";
 import { addStage2Attempt, getStage2Attempts, getStickPreference, hasPassedStage2, STAGE2_PASS_THRESHOLD } from "./storage.js";
 
@@ -31,8 +31,8 @@ const DOT_SPEED = 0.0032;          // fraction of the canvas per frame
 const DOT_RADIUS = 2.2;
 const DOT_MAX_LIFE = 24;           // frames before a dot is replaced
 
-const TRIALS_PER_BLOCK = 40;
-const TOTAL_BLOCKS = 2;
+const TRIALS_PER_BLOCK = 15;
+const TOTAL_BLOCKS = 1;
 const COHERENCE_START = 0.5;
 const COHERENCE_STEP = 0.05;
 const COHERENCE_MIN = 0.03;
@@ -44,8 +44,10 @@ const TRIAL_GAP_MS = 500;          // the stick must rest in the centre this lon
 const FEEDBACK_MS = 650;           // how long "Correct" / "Try again" shows
 
 // Part 2: follow the target (same behaviour as the practice on stage 1)
-const FOLLOW_TRIALS = 5;
-const FOLLOW_MS = 10000;           // how long each target moves before it stops
+const FOLLOW_TRIALS = 20;
+// EXPERIMENTERS: to change how long each target moves (the follow-the-target
+// duration), change FOLLOW_MS below. It is in milliseconds (15000 = 15 seconds).
+const FOLLOW_MS = 15000;           // how long each target moves before it stops
 const FOLLOW_SPEED_FIRST = 0.6;    // speed of the first target (1 = base speed); each target is a little faster
 const FOLLOW_SPEED_LAST = 1.5;
 const FOLLOW_RAMP_START = 0.25;    // each target starts at this fraction of its speed, then speeds up
@@ -68,6 +70,7 @@ const statusText = $("rdm-status-text");
 const blockValue = $("rdm-block-value");
 const trialValue = $("rdm-trial-value");
 const coherenceValue = $("rdm-coherence-value");
+const coherenceCard = coherenceValue.parentElement;
 const progressFill = $("rdm-progress-fill");
 const feedbackBadge = $("rdm-feedback-badge");
 const partLabel = $("part-label");
@@ -129,6 +132,41 @@ let inputReady = false;            // first frame only records buttons, so a hel
 const keys = keyboardInput();   // keyboard backup for testing: arrows move, Space / Enter confirm, Y and B
 
 let stick = getStickPreference();  // "left", "right" or null
+let frameNumber = 0;
+let frameLogBuffer = [];
+let frameLogTimer = 0;
+
+function flushFrameLog() {
+    if (!frameLogBuffer.length) return;
+    logRows("stage2", frameLogBuffer);
+    frameLogBuffer = [];
+}
+
+window.addEventListener("pagehide", flushFrameLog);
+
+function queueFrameLog(s, now, inside) {
+    if (phase === "idle" || phase === "complete") return;
+    const distance = part === 2 ? Math.hypot(s.x - target.x, s.y - target.y) : "";
+    frameLogBuffer.push({
+        event: "frame",
+        attempt: attemptNumber,
+        action: part === 1 ? "rdm" : "follow",
+        phase,
+        part,
+        block: part === 1 ? block : "",
+        trial_n: trial,
+        frame_n: ++frameNumber,
+        frame_time_ms: Math.round(now - (part === 1 ? stimulusOnset : trialStartedAt)),
+        stick_x: Math.round(s.x * 10000) / 10000,
+        stick_y: Math.round(s.y * 10000) / 10000,
+        target_x: part === 2 ? Math.round(target.x * 10000) / 10000 : "",
+        target_y: part === 2 ? Math.round(target.y * 10000) / 10000 : "",
+        distance: part === 2 ? Math.round(distance * 10000) / 10000 : "",
+        inside: part === 2 ? (inside ? 1 : 0) : "",
+        direction: part === 1 ? currentDirection : "",
+        coherence_pct: part === 1 ? Math.round(coherence * 10000) / 100 : ""
+    });
+}
 
 
 /* ---------------------------------------------------------------------
@@ -195,6 +233,7 @@ function drawCrosshair() {
    --------------------------------------------------------------------- */
 
 function startTask() {
+    flushFrameLog();
     part = 1;
     block = 1;
     trial = 0;
@@ -203,6 +242,8 @@ function startTask() {
     followResults = [];
     attemptStart = performance.now();
     attemptNumber = getStage2Attempts().length + 1;
+    frameNumber = 0;
+    frameLogBuffer = [];
     logRow("stage2", { event: "attempt_start", attempt: attemptNumber });
     completeScreen.hidden = true;
     canvasBox.classList.remove("is-follow");
@@ -247,7 +288,8 @@ function registerResponse(response) {
         coherence_pct: Math.round(coherence * 10000) / 100,
         response,
         correct: correct ? 1 : 0,
-        rt_ms: Math.round(performance.now() - stimulusOnset)
+        rt_ms: Math.round(performance.now() - stimulusOnset),
+        response_time_ms: Math.round(performance.now() - stimulusOnset)
     });
     coherence = correct
         ? Math.max(COHERENCE_MIN, coherence - COHERENCE_STEP)
@@ -347,7 +389,8 @@ function lockFollowTrial(distance) {
         speed_scale: last.speedScale,
         final_distance: last.finalDistance,
         average_distance: last.averageDistance,
-        time_ms: last.timeMs
+        time_ms: last.timeMs,
+        response_time_ms: last.timeMs
     });
     trial += 1;
     following = null;
@@ -466,14 +509,16 @@ function updateStats() {
     const total = TRIALS_PER_BLOCK * TOTAL_BLOCKS + FOLLOW_TRIALS;
     let done;
     if (part === 1) {
-        blockValue.textContent = `${Math.min(block, TOTAL_BLOCKS)} / ${TOTAL_BLOCKS}`;
+        blockValue.textContent = "1 / 2";   // block 1 = dot motion, block 2 = follow the target
         trialValue.textContent = `${Math.min(trial, TRIALS_PER_BLOCK)} / ${TRIALS_PER_BLOCK}`;
         coherenceValue.textContent = `${Math.round(coherence * 100)}%`;
+        coherenceCard.hidden = false;
         done = (block - 1) * TRIALS_PER_BLOCK + trial;
     } else {
-        blockValue.textContent = "Part 2";
+        blockValue.textContent = "2 / 2";
         trialValue.textContent = `${Math.min(trial, FOLLOW_TRIALS)} / ${FOLLOW_TRIALS}`;
         coherenceValue.textContent = "—";
+        coherenceCard.hidden = true;   // coherence only applies to the dot motion block
         done = TRIALS_PER_BLOCK * TOTAL_BLOCKS + trial;
     }
     progressFill.style.width = `${phase === "complete" ? 100 : (done / total) * 100}%`;
@@ -553,6 +598,7 @@ function frame(now) {
     } else if (phase === "complete") {
         if (repeat) startTask();
         else if (next && !continueButton.disabled) {
+            flushFrameLog();
             logRow("stage2", { event: "continue_to_stage3", attempt: attemptNumber });
             window.location.href = NEXT_URL;
         }
@@ -560,6 +606,12 @@ function frame(now) {
 
     if (part === 2 && phase !== "idle") drawFollowField(inside);
     else drawDotField();
+    queueFrameLog(s, now, inside);
+    if (frameLogBuffer.length >= 30) flushFrameLog();
+    if (!frameLogTimer) frameLogTimer = window.setTimeout(() => {
+        frameLogTimer = 0;
+        flushFrameLog();
+    }, 500);
     requestAnimationFrame(frame);
 }
 
@@ -580,19 +632,20 @@ if (!stick) {
     document.querySelector(".practice-panel").hidden = true;
 } else {
     const name = stick === "left" ? "left thumbstick" : "right thumbstick";
-    instructions.innerHTML = `<b>How to respond:</b> some dots move together in one direction (up, down, left or right) while the rest drift randomly. As soon as you can tell the direction, tilt the <b>${name}</b> that way, then re-centre it before the next trial. Arrow keys work if no gamepad is connected.`;
+    instructions.innerHTML = `<b>How to respond:</b> some dots move together in one direction (up, down, left or right) while the rest drift randomly. As soon as you can tell the direction, tilt the <b>${name}</b> that way. After this block, you will follow a moving target for the next one. When the target stops, press a shoulder button to lock your position.`;
     continueButton.disabled = !hasPassedStage2();
     updateAttemptNote();
     startButton.addEventListener("click", startTask);
     redoButton.addEventListener("click", startTask);
     continueButton.addEventListener("click", () => {
         if (continueButton.disabled) return;
+        flushFrameLog();
         logRow("stage2", { event: "continue_to_stage3", attempt: attemptNumber });
         window.location.href = NEXT_URL;
     });
     ensureSession();
     logRow("stage2", { event: "stage_start" });
     seedDotField();
-    statusText.innerHTML = "Connect a gamepad and press <b>Begin</b> (or a shoulder button) to start the task.";
+    statusText.innerHTML = "Connect a gamepad and press the shoulder button to start.";
     requestAnimationFrame(frame);
 }

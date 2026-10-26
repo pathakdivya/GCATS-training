@@ -20,7 +20,8 @@
 </head>
 
 <body class="page-about">
-  <div class="neo-shell">
+  <div class="page-shell">
+    <div class="neo-shell">
 
     <!-- ================= TOP BAR ================= -->
     <header class="neo-topbar">
@@ -62,23 +63,24 @@
 
       <!-- LEFT: what to do, how far along you are, and the Begin button -->
       <section class="checklist-panel" aria-labelledby="task-title">
-        <h2 id="task-title">Random Dot Motion Task</h2>
-        <p class="task-intro">Watch the moving dots and tilt your thumbstick toward the direction most of them are drifting. The task adapts to your performance as you go. Afterwards there is a short follow-the-target part.</p>
+        <h2 id="task-title">Let's play a game!</h2>
+        <p class="task-intro"> <b>Block 1:</b> Watch the moving dots and tilt your thumbstick toward the direction most of them are drifting. This game get's difficult as you go ahead.</p>
+        <p class="task-intro"> <b>Block 2:</b> Follow the moving target with your thumbstick. When the target stops, press a shoulder button to lock your position.</p>
 
         <div id="no-stick-notice" class="task-notice" hidden>
           No thumbstick preference was found. Please go back to <a href="about.html">About the Device</a> and choose one first.
         </div>
 
         <div id="task-body">
-          <p class="task-status" id="rdm-status-text">Connect a gamepad and press <b>Begin</b> to start the task.</p>
+          <p class="task-status" id="rdm-status-text">Connect a gamepad and press the shoulder button to start.</p>
 
           <div class="rdm-status-row">
             <div class="rdm-status-card"><span class="rdm-status-label">Block</span><span class="rdm-status-value" id="rdm-block-value">&mdash; / 2</span></div>
-            <div class="rdm-status-card"><span class="rdm-status-label">Trial</span><span class="rdm-status-value" id="rdm-trial-value">&mdash; / 40</span></div>
-            <div class="rdm-status-card"><span class="rdm-status-label">Coherence</span><span class="rdm-status-value" id="rdm-coherence-value">&mdash;</span></div>
+            <div class="rdm-status-card"><span class="rdm-status-label">COUNT</span><span class="rdm-status-value" id="rdm-trial-value">&mdash; / 15</span></div>
+            <div class="rdm-status-card"><span class="rdm-status-label">% Coherent Dots</span><span class="rdm-status-value" id="rdm-coherence-value">&mdash;</span></div>
           </div>
 
-          <div class="progress-bar"><div class="progress-fill" id="rdm-progress-fill"></div></div>
+          <div class="progress-bar rdm-progress"><div class="progress-fill" id="rdm-progress-fill"></div></div>
 
           <button type="button" class="calibration-btn" id="rdm-start-btn">Begin Task</button>
 
@@ -126,9 +128,18 @@
         </div>
       </section>
     </main>
-  </div>
+    </div>
 
-  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+    <!--- Footer --->
+    <footer class="site-footer">
+      <table class="footer-table">
+        <tr>
+          <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
+          <td><strong>Need help?</strong> Contact the experimenter</td>
+        </tr>
+      </table>
+    </footer>
+  </div>
 </body>
 
 </html>

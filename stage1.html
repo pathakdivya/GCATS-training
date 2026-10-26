@@ -6,21 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GCATS — Familiarisation</title>
 
-  <!-- Apply the saved theme immediately (before first paint) to avoid a light/dark flash -->
+  <!-- Borrows the saved theme choice from Welcome -->
   <script>
     document.documentElement.dataset.theme =
       localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
   </script>
 
-  <!-- Page logic: thumbstick practice steps, gamepad polling, theme toggle -->
+  <!-- Loading stage1.js -->
   <script type="module" src="stage1.js"></script>
 
-  <!-- All styling lives in styles.css (the about-page rules are at the end of it). -->
+  <!-- Loading styles.css -->
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="page-about">
-  <div class="neo-shell">
+  <div class="page-shell">
+    <div class="neo-shell">
 
     <!-- ================= TOP BAR ================= -->
     <header class="neo-topbar">
@@ -91,9 +92,18 @@
         <p id="stick-note" class="stick-note"></p>
       </section>
     </main>
-  </div>
+    </div>
 
-  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+    <!--- Footer --->
+    <footer class="site-footer">
+      <table class="footer-table">
+        <tr>
+          <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
+          <td><strong>Need help?</strong> Contact the experimenter</td>
+        </tr>
+      </table>
+    </footer>
+  </div>
 </body>
 
 </html>

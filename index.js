@@ -1,19 +1,3 @@
-/* =====================================================================
-   GCATS gamepad training - page logic
-
-   The file is ordered the way a participant moves through the page:
-
-     1. Setup            page elements, settings, and the app's memory
-     2. Welcome          wait for a full-screen window and a controller
-     3. Detection        work out whether it is an Xbox or PlayStation pad
-     4. Hold screen      show how to hold the controller
-     5. Navigation       three short practice steps (D-pad, D-pad, shoulder)
-     6. Overview         the "What happens next?" screen
-     7. Input            read the buttons on every frame
-     8. Start-up         attach listeners and begin
-   ===================================================================== */
-
-
 import { BUTTON_NAMES, CONTINUE_BUTTON, controllerFamily, firstConnectedGamepad, imagePath, isFullScreenReady, LAYOUT_KEY, REPEAT_BUTTON } from "./controller.js";
 import { ensureSession, logRow } from "./datalog.js";
 import { initThemeToggle } from "./theme.js";
@@ -22,7 +6,7 @@ import { initThemeToggle } from "./theme.js";
    1. SETUP
    --------------------------------------------------------------------- */
 
-/* ---- Page elements (all defined in index.html) ---- */
+/* ---- Page elements---- */
 
 // The big "Welcome!" overlay shown until a controller is ready.
 const welcomePrompt = document.getElementById("welcome-prompt");
@@ -55,7 +39,9 @@ const psChoice = document.getElementById("choose-playstation");
 const navigationPrompt = document.getElementById("navigation-prompt");
 const navigationActionImage = document.getElementById("navigation-action-image");
 const navigationActionCopy = document.getElementById("navigation-action-copy");
+const navigationActionHint = document.getElementById("navigation-action-hint");
 const navigationActionStep = document.getElementById("navigation-action-step");
+const navigationProgress = document.getElementById("navigation-progress");
 const navigationPracticeStatus = document.getElementById("navigation-practice-status");
 
 // The final overview shown once practice is complete.
@@ -77,8 +63,9 @@ const skipStepButton = document.getElementById("skip-step");
    One button per step, shown in this order. "button" is the standard gamepad
    button number the participant must press, "done" is the message shown once
    they press it, and "image" is only a file name (imagePath() adds the brand
-   folder). "label", "copy" and "done" can be plain text or, where the two
-   brands name the button differently, { xbox: "...", playstation: "..." }. */
+   folder). "hint" is an optional extra line under the heading. "label" and
+   "done" can be plain text or, where the two brands name the button
+   differently, { xbox: "...", playstation: "..." }. */
 const DPAD_ALT = "Neon highlight of a gamepad D-pad";
 const SHOULDER_ALT = "Neon highlight of the controller shoulder buttons";
 const PARTS_ALT = "Labelled diagram of the controller";
@@ -90,35 +77,34 @@ function faceButton(button, xboxName, psName) {
     return {
         button, image: "labelled.png", alt: PARTS_ALT,
         label: names,
-        copy: both((n) => `Now press the ${n} button.`),
         done: both((n) => `${n} was pressed`)
     };
 }
 
 const navigationActions = [
     { button: 12, image: "d_pad.png", alt: DPAD_ALT, label: "D-pad up",
-      copy: "Press D-pad up button.", done: "D-pad up was pressed" },
+      done: "D-pad up was pressed" },
     { button: 13, image: "d_pad.png", alt: DPAD_ALT, label: "D-pad down",
-      copy: "Now press D-pad down button.", done: "D-pad down was pressed" },
+      done: "D-pad down was pressed" },
     { button: 14, image: "d_pad.png", alt: DPAD_ALT, label: "D-pad left",
-      copy: "Now press D-pad left button.", done: "D-pad left was pressed" },
+      done: "D-pad left was pressed" },
     { button: 15, image: "d_pad.png", alt: DPAD_ALT, label: "D-pad right",
-      copy: "Now press D-pad right button.", done: "D-pad right was pressed" },
+      done: "D-pad right was pressed" },
     { button: 4, image: "shoulder.png", alt: SHOULDER_ALT, label: "Left shoulder button",
-      copy: "Now, press the left shoulder button.", done: "Left shoulder button was pressed" },
+      done: "Left shoulder button was pressed" },
     { button: 5, image: "shoulder.png", alt: SHOULDER_ALT, label: "Right shoulder button",
-      copy: "Now press the right shoulder button.", done: "Right shoulder button was pressed" },
+      done: "Right shoulder button was pressed" },
     faceButton(3, "Y ", "Triangle "),
     faceButton(1, "B ", "Circle "),
     faceButton(0, "A ", "Cross "),
     faceButton(2, "X ", "Square "),
     { button: 6, image: "labelled.png", alt: PARTS_ALT,
       label: { xbox: "Left trigger", playstation: "L2 trigger" },
-      copy: { xbox: "Now press the left trigger, you will find a soft press button below the left shoulder button.", playstation: "Now press the L2 trigger." },
+      hint: "It is the soft press button below the left shoulder button.",
       done: { xbox: "Left trigger was pressed", playstation: "L2 trigger was pressed" } },
     { button: 7, image: "labelled.png", alt: PARTS_ALT,
       label: { xbox: "Right trigger", playstation: "R2 trigger" },
-      copy: { xbox: "Finally, press the right trigger,this is also a soft press button below the right shoulder button.", playstation: "Finally, press the R2 trigger." },
+      hint: "It is also a soft press button, below the right shoulder button.",
       done: { xbox: "Right trigger was pressed", playstation: "R2 trigger was pressed" } }
 ];
 
@@ -315,24 +301,35 @@ function beginNavigation() {
     showNavigationStep(navigationStep);
 }
 
-// Shows one practice step: the brand's picture, the instruction, the "Step n of 13:"
-// tag, and the "Try: ..." line.
+const GAMEPAD_ICON = '<svg class="navigation-status-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg>';
+
+// Shows one practice step: the step counter, the brand's picture, the
+// "Press ..." heading, and the "Waiting for input..." line.
 function showNavigationStep(step) {
     const action = navigationActions[step];
     stepShownAt = performance.now();
     // Falls back to the Xbox folder if no layout is known (should not happen).
     const layout = preferredLayout ?? "xbox";
-    const label = pick(action.label, layout);
+    const label = pick(action.label, layout).trim();
+    const total = navigationActions.length + 1;
     navigationActionImage.hidden = false;
     skipStepButton.hidden = false;
-    navigationActionStep.parentElement.hidden = false;
+    navigationProgress.hidden = false;
     navigationPracticeStatus.classList.remove("roomy");
     navigationActionImage.src = imagePath(layout, action.image);
     navigationActionImage.alt = action.alt;
-    navigationActionCopy.textContent = pick(action.copy, layout);
-    navigationActionStep.innerHTML = `<span class="navigation-key">Step ${step + 1} of ${navigationActions.length + 1}:</span> ${label}`;
-    navigationPracticeStatus.textContent = `Try: ${label}.`;
+    navigationActionStep.textContent = `Step ${step + 1} of ${total}`;
+    navigationActionCopy.classList.add("navigation-action-heading");
+    navigationActionCopy.textContent = `Press ${label.split(" ").map((word) => word[0].toUpperCase() + word.slice(1)).join(" ")}`;
+    navigationActionHint.hidden = !action.hint;
+    navigationActionHint.textContent = action.hint ?? "";
+    setPracticeStatus("Waiting for input...");
     navigationPracticeStatus.classList.remove("pressed");
+}
+
+// Writes a message in the status box, led by the small gamepad icon.
+function setPracticeStatus(text) {
+    navigationPracticeStatus.innerHTML = `${GAMEPAD_ICON} <span>${text}</span>`;
 }
 
 // The right button was pressed: say so, wait a moment, then move on
@@ -348,7 +345,7 @@ function onNavigationPress(step) {
         rt_ms: Math.round(performance.now() - stepShownAt),
         skipped: 0
     });
-    navigationPracticeStatus.textContent = pick(navigationActions[step].done, preferredLayout ?? "xbox");
+    setPracticeStatus(pick(navigationActions[step].done, preferredLayout ?? "xbox"));
     navigationPracticeStatus.classList.add("pressed");
     navigationTimer = setTimeout(() => {
         navigationLocked = false;
@@ -378,12 +375,14 @@ function showRepeatStep() {
         : "D-pad up, down, left, right &middot; left and right shoulder buttons &middot; Y, B, A, X &middot; left and right triggers";
     navigationStep = navigationActions.length;
     navigationActionImage.hidden = true;
-    navigationActionStep.parentElement.hidden = true; // no step label or bullet on this page
+    navigationProgress.hidden = true; // no step counter on this page
+    navigationActionHint.hidden = true;
+    navigationActionCopy.classList.remove("navigation-action-heading");
     navigationActionCopy.innerHTML =
         `The next tasks use these buttons, so remember what each one is called:<br><strong>${recap}</strong>`;
     navigationPracticeStatus.innerHTML =
         `Not sure yet? Press <span class="navigation-key">${names.repeat}</span> to practise again.<br>` +
-        `Confident? Press <span class="navigation-key">${names.next}</span> to go on to the next task.`;
+        `Confident? Press <span class="navigation-key">${names.next}</span> to go ahead.`;
     navigationPracticeStatus.classList.remove("pressed");
     navigationPracticeStatus.classList.add("roomy");
 }
@@ -408,7 +407,7 @@ function completeNavigation() {
     trainingIntro.hidden = false;
     trainingStages.hidden = false;
     trainingNext.innerHTML =
-        `Press <span class="navigation-key">${names.next}</span> to start Stage 1: About the device`;
+        `Press <span class="navigation-key">${names.next}</span> to go ahead.`;
 }
 
 

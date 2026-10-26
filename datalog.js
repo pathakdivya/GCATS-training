@@ -142,18 +142,30 @@ export function deleteSession(id) {
 
 // Adds one row to a stage's table. "fields" are the columns of this event.
 export function logRow(stage, fields) {
+    logRows(stage, [fields]);
+}
+
+// Adds multiple rows in one localStorage write. This is used for frame samples
+// so high-frequency input logging does not block the animation loop.
+export function logRows(stage, fieldsList) {
     const db = load();
     let session = db.sessions[db.currentSessionId];
     if (!session) session = newSession(db);
-    const now = new Date();
-    (session.stages[stage] ??= []).push({
-        stage,
-        timestamp: now.toISOString(),
-        elapsed_s: Math.round((now - new Date(session.startedAt)) / 10) / 100,
-        controller_brand: localStorage.getItem(LAYOUT_KEY) ?? "",
-        thumbstick: getStickPreference() ?? "",
-        ...fields
-    });
+    const rows = session.stages[stage] ??= [];
+    const startedAt = new Date(session.startedAt);
+    const controllerBrand = localStorage.getItem(LAYOUT_KEY) ?? "";
+    const thumbstick = getStickPreference() ?? "";
+    for (const fields of fieldsList) {
+        const now = fields.timestamp ? new Date(fields.timestamp) : new Date();
+        rows.push({
+            stage,
+            timestamp: now.toISOString(),
+            elapsed_s: Math.round((now - startedAt) / 10) / 100,
+            controller_brand: controllerBrand,
+            thumbstick,
+            ...fields
+        });
+    }
     save(db);
 }
 

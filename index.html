@@ -19,16 +19,6 @@
 
   <div class="page-shell">
 
-    <!--- Footer --->
-    <footer class="site-footer">
-      <table class="footer-table">
-        <tr>
-          <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
-          <td><strong>Need help?</strong> Contact the experimenter</td>
-        </tr>
-      </table>
-    </footer>
-
     <div class="neo-shell">
 
       <!-- Header -->
@@ -42,15 +32,17 @@
               aria-hidden="true"
             />
           </div>
+
           <div class="brand-copy">
             <strong>GCATS</strong>
             <span>Training protocol</span>
           </div>
         </div>
         <div class="topbar-actions">
-          <!-- Debug helper, mouse only (tabindex -1 keeps it out of keyboard focus).
-               Visible from the connected screen until the practice ends. -->
-          <button id="skip-step" class="skip-step" type="button" tabindex="-1" hidden>Skip this step</button>
+
+          <!-- Skip button --->
+          <button id="skip-step" class="skip-step" type="button" tabindex="-1" hidden>Skip</button>
+
           <!-- Icon is updated by updateThemeButton() in index.js -->
           <button
             id="theme-toggle"
@@ -113,12 +105,14 @@
                   <span id="navigation-prompt-heading" class="kicker">Remember these buttons!</span>
                   <div class="navigation-prompt-grid">
                     <div class="navigation-prompt-copy">
+                      <!-- Step counter; hidden on the final recap page. -->
+                      <div id="navigation-progress" class="navigation-progress">
+                        <span id="navigation-action-step">Step 1 of 13</span>
+                      </div>
                       <img id="navigation-action-image" class="navigation-action-image" src="images/Xbox/d_pad.png" alt="Neon illustration of a gamepad D-pad">
-                      <p id="navigation-action-copy">Press D-pad up or down once. This action is for going to the next page or back to the previous page.</p>
-                      <ul>
-                        <li id="navigation-action-step"><span class="navigation-key">Step 1 of 13:</span> D-pad up</li>
-                      </ul>
-                      <p id="navigation-practice-status" class="navigation-practice-status">Try: D-pad up.</p>
+                      <p id="navigation-action-copy" class="navigation-action-heading">Press D-pad Up</p>
+                      <p id="navigation-action-hint" class="navigation-action-hint" hidden></p>
+                      <p id="navigation-practice-status" class="navigation-practice-status">Waiting for input...</p>
                     </div>
                   </div>
                 </div>
@@ -166,6 +160,16 @@
         </div>
       </main>
     </div>
+
+    <!--- Footer --->
+    <footer class="site-footer">
+      <table class="footer-table">
+        <tr>
+          <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
+          <td><strong>Need help?</strong> Contact the experimenter</td>
+        </tr>
+      </table>
+    </footer>
 
   </div>
 </body>

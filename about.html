@@ -12,7 +12,7 @@
       localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
   </script>
 
-  <!-- Page logic: controller selection, gamepad polling, theme toggle -->
+  <!-- Loading about.js -->
   <script type="module" src="about.js"></script>
 
   <!-- All styling lives in styles.css -->
@@ -20,7 +20,8 @@
 </head>
 
 <body class="page-about">
-  <div class="neo-shell">
+  <div class="page-shell">
+    <div class="neo-shell">
 
     <!-- ================= TOP BAR ================= -->
     <header class="neo-topbar">
@@ -49,7 +50,7 @@
         <a href="stage3.html">Questionnaire</a>
       </nav>
 
-      <!-- Light / dark theme switch; its icon is set by updateThemeButton() in about.js -->
+      <!-- theme switch icon is set by updateThemeButton() in about.js -->
       <button
         id="theme-toggle"
         class="theme-toggle"
@@ -108,9 +109,6 @@
       <section class="visualizer-panel" aria-labelledby="visualizer-title">
         <div class="visualizer-heading-row">
           <h1 id="visualizer-title" class="visualizer-title">See in Action!</h1>
-          <div class="visualizer-note">
-            The diagram will respond to your gamepad's movements.
-          </div>
         </div>
 
         <!-- Stage: the diagram for the detected controller brand (about.js) -->
@@ -127,17 +125,19 @@
         </section>
       </section>
     </main>
-  </div>
+    </div>
 
     <!--- Footer --->
-  <footer class="site-footer">
-    <table class="footer-table">
-      <tr>
-        <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
-        <td><strong>Need help?</strong> Contact the experimenter</td>
-      </tr>
-    </table>
-  </footer>
+    <footer class="site-footer">
+      <table class="footer-table">
+        <tr>
+          <td>GCATS © 2026 · <a href="data.html">Data export</a></td>
+          <td><strong>Need help?</strong> Contact the experimenter</td>
+        </tr>
+      </table>
+    </footer>
+  </div>
+
 </body>
 
 </html>

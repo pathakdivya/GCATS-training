@@ -18,7 +18,7 @@
 
 import { BUTTON_NAMES, CONTINUE_BUTTON, firstConnectedGamepad, keyboardInput, REPEAT_BUTTON } from "./controller.js";
 import { autoDetect, drawDiagramStick, getLayout, loadDiagrams, SHOULDER_BUTTONS, showSavedDiagram } from "./diagram.js";
-import { countRows, ensureSession, logRow } from "./datalog.js";
+import { countRows, ensureSession, logRow, logRows } from "./datalog.js";
 import { initThemeToggle } from "./theme.js";
 import { getStickPreference } from "./storage.js";
 
@@ -116,15 +116,50 @@ const keys = keyboardInput();   // keyboard backup for testing: arrows move, Spa
 let attemptNumber = 1;
 let staticDistances = [];
 let followDistances = [];
+let frameNumber = 0;
+let frameLogBuffer = [];
+let frameLogTimer = 0;
 
 const round4 = (n) => Math.round(n * 10000) / 10000;
 
 // Starts attempt number (attempts so far + 1), also after a page reload.
 function startAttempt() {
+    flushFrameLog();
     attemptNumber = countRows("stage1", "attempt_start") + 1;
     staticDistances = [];
     followDistances = [];
+    frameNumber = 0;
+    frameLogBuffer = [];
     logRow("stage1", { event: "attempt_start", attempt: attemptNumber });
+}
+
+function flushFrameLog() {
+    if (!frameLogBuffer.length) return;
+    logRows("stage1", frameLogBuffer);
+    frameLogBuffer = [];
+}
+
+window.addEventListener("pagehide", flushFrameLog);
+
+function queueFrameLog(step, stick, now, confirmed) {
+    const distance = step.trials ? Math.hypot(stick.x - target.x, stick.y - target.y) : "";
+    frameLogBuffer.push({
+        event: "frame",
+        attempt: attemptNumber,
+        action: step.id,
+        phase,
+        step: stepIndex + 1,
+        trial_n: step.trials ? trial + 1 : "",
+        frame_n: ++frameNumber,
+        frame_time_ms: Math.round(now - stepStartedAt),
+        stick_x: round4(stick.x),
+        stick_y: round4(stick.y),
+        target_x: step.trials ? round4(target.x) : "",
+        target_y: step.trials ? round4(target.y) : "",
+        distance: step.trials ? round4(distance) : "",
+        inside: step.trials ? (distance <= TARGET_HIT ? 1 : 0) : "",
+        confirmed: confirmed ? 1 : 0
+    });
 }
 
 
@@ -194,13 +229,15 @@ function showStep(i) {
 // Shows the "... detected" message, then moves on after a short pause.
 function completeStep(message) {
     locked = true;
+    const responseTimeMs = Math.round(performance.now() - stepStartedAt);
     logRow("stage1", {
         event: "step_complete",
         attempt: attemptNumber,
         step: stepIndex + 1,
         step_id: steps[stepIndex].id,
         label: steps[stepIndex].short,
-        time_ms: Math.round(performance.now() - stepStartedAt)
+        time_ms: responseTimeMs,
+        response_time_ms: responseTimeMs
     });
     setStatus(`✓ ${message}`, "is-good");
     clearTimeout(feedbackTimer);
@@ -312,7 +349,8 @@ function lockTrial(step, distance) {
         speed_scale: step.type === "follow" ? round4(following.speedScale) : "",
         final_distance: round4(distance),
         average_distance: averageDistance,
-        time_ms: timeMs
+        time_ms: timeMs,
+        response_time_ms: timeMs
     });
     lastLockWasGuided = isGuided();
     trial += 1;
@@ -446,12 +484,20 @@ function frame(now) {
     if (stepIndex >= steps.length) {
         if (repeat) restart();
         else if (next) {
+            flushFrameLog();
             logRow("stage1", { event: "continue_to_stage2", attempt: attemptNumber });
             window.location.href = NEXT_URL;
         }
     } else if (!locked) {
-        runStep(steps[stepIndex], stick, now, confirmed);
+        const step = steps[stepIndex];
+        queueFrameLog(step, stick, now, confirmed);
+        runStep(step, stick, now, confirmed);
     }
+    if (frameLogBuffer.length >= 30) flushFrameLog();
+    if (!frameLogTimer) frameLogTimer = window.setTimeout(() => {
+        frameLogTimer = 0;
+        flushFrameLog();
+    }, 500);
     requestAnimationFrame(frame);
 }
 
