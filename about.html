@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GCATS — About Device</title>
 
-  <!-- Apply the saved theme immediately (before first paint) to avoid a light/dark flash -->
+  <!-- Borrows the saved theme choice from Welcome -->
   <script>
     document.documentElement.dataset.theme =
       localStorage.getItem('gcats-theme') === 'light' ? 'light' : 'dark';
@@ -15,7 +15,7 @@
   <!-- Page logic: controller selection, gamepad polling, theme toggle -->
   <script type="module" src="about.js"></script>
 
-  <!-- All styling lives in styles.css (the about-page rules are at the end of it). -->
+  <!-- All styling lives in styles.css -->
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -74,7 +74,7 @@
 
             <h3>Important components:</h3>
             <ul class="about-component-list">
-              <li><b>Thumbsticks</b> &mdash; two small joysticks, you can tilt in any direction.</li>
+              <li><b>Thumbsticks</b> &mdash; two small joysticks that you can tilt 360°.</li>
               <li><b>Shoulder buttons</b> &mdash; sitting along the top edge under your index fingers.</li>
             </ul>
 
@@ -84,12 +84,13 @@
           </section>
 
           <section class="about-page is-hidden" data-about-page="2">
+            
             <!-- grip.png from the detected brand's image folder; set by about.js -->
             <img id="grip-image" class="grip-comparison" src="" alt="" hidden>
 
             <div class="rdm-setup-panel">
               <h3>So, which thumbstick would you like to use?</h3>
-              <p class="rdm-field-label">Your choice will be used throughout the familiarisation and task stages. Use the D-pad left and right to choose a thumbstick.</p>
+              <p class="rdm-field-label">Use the D-pad left and right to choose a thumbstick.</p>
               <div class="rdm-choice-row">
                 <button type="button" class="rdm-choice-btn" data-stick="left">Left Thumbstick</button>
                 <button type="button" class="rdm-choice-btn" data-stick="right">Right Thumbstick</button>
@@ -112,10 +113,10 @@
           </div>
         </div>
 
-        <!-- Stage: the diagram for the detected controller brand (chosen automatically by about.js) -->
+        <!-- Stage: the diagram for the detected controller brand (about.js) -->
         <section class="controller-stage" aria-live="polite">
 
-        <!-- Empty state (shown only until a controller brand is known) -->
+        <!-- Empty state -->
         <div id="controller-empty-state" class="controller-empty-state">
           <strong>Waiting for your controller.</strong>
           Press any button on the gamepad and its diagram will appear here.
@@ -128,7 +129,7 @@
     </main>
   </div>
 
-  <footer class="site-footer">© 2026 Designed by divya@NSLab · <a href="data.html">Data export</a></footer>
+  <footer class="site-footer">GCATS © 2026 · <a href="data.html">Data export</a></footer>
 </body>
 
 </html>
