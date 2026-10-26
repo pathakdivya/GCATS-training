@@ -18,12 +18,10 @@ Continuous affective tracking tasks ask participants to make fine, sustained thu
 
 ## Getting started
 
-No installation or build step is required to run the app — the `.js` files are already compiled and checked in.
-
 1. Clone the repository:
    ```bash
-   git clone https://github.com/pathakdivya/gamepad-training-protocol.git
-   cd gamepad-training-protocol
+   git clone https://github.com/pathakdivya/GCATS-training.git
+   cd GCATS-training
    ```
 2. Serve the folder with any static file server (opening `index.html` directly via `file://` will not work, since the pages load ES modules). For example:
    ```bash
@@ -36,13 +34,18 @@ No installation or build step is required to run the app — the `.js` files are
 ## Project structure
 
 ```
-├── index.html / about.html / stage1.html / stage2.html / stage3.html   # pages
-├── about.js / stage1.js / stage2.js / stage3.js / storage.js           # compiled output
+├── index.html / about.html / stage1.html / stage2.html / stage3.html   # main pages
+├── data.html / diagrams.html                                           # CSV export, controller diagrams
+├── index.js / about.js / stage1.js / stage2.js / stage3.js / data.js   # one script per page
+├── controller.js                                                       # layouts, button names, gamepad helpers
+├── datalog.js                                                          # sessions, event logging, CSV export
+├── storage.js                                                          # thumbstick choice, Stage 2 attempts, comfort score
+├── diagram.js / theme.js                                               # shared UI helpers
 ├── styles.css                                                          # all styling
 └── images/                                                             # controller diagrams, logo
 ```
 
-`storage.js` is shared across all stages — it defines the data model (`Stage1Progress`, `Stage2Attempt`, `QuestionnaireResponses`, `SessionRecord`) and the CSV export logic.
+`datalog.js` keeps every session in localStorage as sessions, stages and rows, and builds the CSV. `storage.js` holds the thumbstick choice, the attempt summaries and the questionnaire score.
 
 ## Data & privacy
 
@@ -54,5 +57,5 @@ This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Acknowledgements
 
-Built as part of ongoing research work by Divya Pathak. The controller diagram and connection-detection approach draw on lessons learned adapting [controllercheck.org](https://controllercheck.org).
+Built as part of ongoing research work by Divya Pathak. The controller diagram and connection-detection approach draw on lessons learned adapting [controllercheck.org](https://controllercheck.org). We have not reused their code files.
 
