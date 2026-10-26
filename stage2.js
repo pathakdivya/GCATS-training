@@ -135,6 +135,8 @@ let stick = getStickPreference();  // "left", "right" or null
 let frameNumber = 0;
 let frameLogBuffer = [];
 let frameLogTimer = 0;
+let lastFrameLogAt = -Infinity;
+const FRAME_LOG_INTERVAL_MS = 100;
 
 function flushFrameLog() {
     if (!frameLogBuffer.length) return;
@@ -146,6 +148,8 @@ window.addEventListener("pagehide", flushFrameLog);
 
 function queueFrameLog(s, now, inside) {
     if (phase === "idle" || phase === "complete") return;
+    if (now - lastFrameLogAt < FRAME_LOG_INTERVAL_MS) return;
+    lastFrameLogAt = now;
     const distance = part === 2 ? Math.hypot(s.x - target.x, s.y - target.y) : "";
     frameLogBuffer.push({
         event: "frame",
@@ -244,6 +248,7 @@ function startTask() {
     attemptNumber = getStage2Attempts().length + 1;
     frameNumber = 0;
     frameLogBuffer = [];
+    lastFrameLogAt = -Infinity;
     logRow("stage2", { event: "attempt_start", attempt: attemptNumber });
     completeScreen.hidden = true;
     canvasBox.classList.remove("is-follow");

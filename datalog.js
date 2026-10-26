@@ -48,8 +48,10 @@ function load() {
 function save(db) {
     try {
         localStorage.setItem(DATA_KEY, JSON.stringify(db));
+        return true;
     } catch (error) {
-        console.error("Could not save the data log (is the storage full?)", error);
+        console.warn("Could not save the data log; frame data may be trimmed.", error);
+        return false;
     }
 }
 
@@ -155,18 +157,49 @@ export function logRows(stage, fieldsList) {
     const startedAt = new Date(session.startedAt);
     const controllerBrand = localStorage.getItem(LAYOUT_KEY) ?? "";
     const thumbstick = getStickPreference() ?? "";
+    const newRows = [];
     for (const fields of fieldsList) {
         const now = fields.timestamp ? new Date(fields.timestamp) : new Date();
-        rows.push({
+        const row = {
             stage,
             timestamp: now.toISOString(),
             elapsed_s: Math.round((now - startedAt) / 10) / 100,
             controller_brand: controllerBrand,
             thumbstick,
             ...fields
-        });
+        };
+        rows.push(row);
+        newRows.push(row);
     }
+    if (save(db)) return true;
+
+    // Frame rows are the only high-volume records. If storage is full, keep
+    // recent summary/trial rows and remove the oldest frame samples first.
+    const isFrameBatch = newRows.every((row) => row.event === "frame");
+    if (!isFrameBatch) return false;
+    const frameRows = [];
+    for (const candidateSession of Object.values(db.sessions)) {
+        for (const candidateRows of Object.values(candidateSession.stages ?? {})) {
+            for (const row of candidateRows) {
+                if (row.event === "frame") frameRows.push({ rows: candidateRows, row });
+            }
+        }
+    }
+    frameRows.sort((a, b) => a.row.timestamp.localeCompare(b.row.timestamp));
+    const removeCount = Math.max(1, Math.ceil(frameRows.length * 0.1));
+    frameRows.slice(0, removeCount).forEach(({ rows: candidateRows, row }) => {
+        const index = candidateRows.indexOf(row);
+        if (index >= 0) candidateRows.splice(index, 1);
+    });
+    if (save(db)) return true;
+
+    // Do not keep retrying an oversized batch on every timer tick.
+    newRows.forEach((row) => {
+        const index = rows.indexOf(row);
+        if (index >= 0) rows.splice(index, 1);
+    });
     save(db);
+    return false;
 }
 
 

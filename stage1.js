@@ -119,6 +119,8 @@ let followDistances = [];
 let frameNumber = 0;
 let frameLogBuffer = [];
 let frameLogTimer = 0;
+let lastFrameLogAt = -Infinity;
+const FRAME_LOG_INTERVAL_MS = 100;
 
 const round4 = (n) => Math.round(n * 10000) / 10000;
 
@@ -130,6 +132,7 @@ function startAttempt() {
     followDistances = [];
     frameNumber = 0;
     frameLogBuffer = [];
+    lastFrameLogAt = -Infinity;
     logRow("stage1", { event: "attempt_start", attempt: attemptNumber });
 }
 
@@ -142,6 +145,8 @@ function flushFrameLog() {
 window.addEventListener("pagehide", flushFrameLog);
 
 function queueFrameLog(step, stick, now, confirmed) {
+    if (now - lastFrameLogAt < FRAME_LOG_INTERVAL_MS) return;
+    lastFrameLogAt = now;
     const distance = step.trials ? Math.hypot(stick.x - target.x, stick.y - target.y) : "";
     frameLogBuffer.push({
         event: "frame",
