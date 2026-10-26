@@ -244,7 +244,7 @@ function registerResponse(response) {
         block,
         trial_n: trial,
         direction: currentDirection,
-        coherence: Math.round(coherence * 10000) / 10000,
+        coherence_pct: Math.round(coherence * 10000) / 100,
         response,
         correct: correct ? 1 : 0,
         rt_ms: Math.round(performance.now() - stimulusOnset)
@@ -414,7 +414,7 @@ function finishAttempt() {
         final_coherence_pct: Math.round(finalCoherenceValue * 10) / 10,
         passed: passed ? 1 : 0,
         mean_follow_distance: Math.round(followAverage * 10000) / 10000,
-        completion_time_ms: Math.round(performance.now() - attemptStart)
+        time_ms: Math.round(performance.now() - attemptStart)
     });
     // The summary decides whether the questionnaire unlocks (storage.js); the trials are in the data log.
     addStage2Attempt({
@@ -432,7 +432,7 @@ function finishAttempt() {
     const names = BUTTON_NAMES[getLayout() ?? "xbox"];
     if (passed) {
         resultHeading.textContent = "Task Complete";
-        resultMessage.textContent = `You met the ${STAGE2_PASS_THRESHOLD}% accuracy criterion. You may continue to the questionnaire, or repeat the task to try to improve your score.`;
+        resultMessage.textContent = `You met the ${STAGE2_PASS_THRESHOLD}% accuracy criterion. You may continue to the questionnaire, or repeat to improve your score.`;
         resultPrompt.innerHTML =
             `Press <span class="navigation-key">${names.repeat}</span> to repeat the task<br>` +
             `Press <span class="navigation-key">${names.next}</span> to continue to the questionnaire`;
