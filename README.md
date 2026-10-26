@@ -16,8 +16,8 @@ Continuous affective tracking tasks ask participants to make fine, sustained thu
 - Browser [`Gamepad API`](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) for controller input, polled directly via `navigator.getGamepads()` each animation frame rather than relying on the (unreliable) `gamepadconnected` event
 - `localStorage` for in-session persistence; a manual CSV export for handing data off to the experimenter.
 
-<img width="400" height="100" alt="01-welcome-waiting" src="https://github.com/user-attachments/assets/04f02c12-182e-4667-9211-45185f703ae4" />
-<img width="400" height="100" alt="04-practice-dpad-pressed" src="https://github.com/user-attachments/assets/2dc20032-e6e1-465b-9df4-e4fb17cb7cec" />
+<img width="300" height="100" alt="01-welcome-waiting" src="https://github.com/user-attachments/assets/04f02c12-182e-4667-9211-45185f703ae4" />
+<img width="300" height="100" alt="04-practice-dpad-pressed" src="https://github.com/user-attachments/assets/2dc20032-e6e1-465b-9df4-e4fb17cb7cec" />
 
 
 ## Getting started
