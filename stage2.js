@@ -1,19 +1,3 @@
-/* =====================================================================
-   GCATS stage 2 - random dot motion task
-
-   Part 1: a field of dots moves; most drift one way (up, down, left or
-           right). The participant tilts the thumbstick that way. The share
-           of dots moving together (coherence) goes down after a correct
-           answer and up after a wrong one (a staircase), for 15 trials.
-           Accuracy of at least 75% is needed to continue.
-   Part 2: follow the target, 20 trials. A target starts in the centre and drifts
-           around the circle while the participant keeps the cursor inside it;
-           when it stops they lock their position with a shoulder button.
-
-   The file is ordered: settings, page elements, the state, the dot field,
-   Part 1, Part 2, results, input, the frame loop, then start-up.
-   ===================================================================== */
-
 import { BUTTON_NAMES, CONTINUE_BUTTON, firstConnectedGamepad, keyboardInput, REPEAT_BUTTON } from "./controller.js";
 import { autoDetect, drawDiagramStick, getLayout, loadDiagrams, SHOULDER_BUTTONS, showSavedDiagram } from "./diagram.js";
 import { ensureSession, logRow, logRows } from "./datalog.js";
@@ -464,6 +448,7 @@ function finishAttempt() {
         mean_follow_distance: Math.round(followAverage * 10000) / 10000,
         time_ms: Math.round(performance.now() - attemptStart)
     });
+    const passedBefore = hasPassedStage2();   // before this attempt is saved
     // The summary decides whether the questionnaire unlocks (storage.js); the trials are in the data log.
     addStage2Attempt({
         timestamp: new Date().toISOString(),
@@ -500,9 +485,10 @@ function finishAttempt() {
         resultPrompt.innerHTML = `Press <span class="navigation-key">${names.repeat}</span> to repeat the task`;
         statusText.textContent = `Below ${STAGE2_PASS_THRESHOLD}%: please repeat the task.`;
     }
-    continueButton.disabled = !hasPassedStage2();
+   continueButton.disabled = !hasPassedStage2();
+   attemptNote.textContent = passedBefore ? `You have already met the ${STAGE2_PASS_THRESHOLD}% accuracy criterion on an earlier attempt.` : "";
+   completeScreen.hidden = false; 
     updateAttemptNote();
-    completeScreen.hidden = false;
     updateStats();
 }
 
