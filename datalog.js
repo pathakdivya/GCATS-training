@@ -212,5 +212,5 @@ export function downloadParticipantCSV(session, stageKeys) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000); /* page will wait for 1 second before downloading */ 
 }
