@@ -16,6 +16,11 @@ export function getStickPreference() {
   return v === "left" || v === "right" ? v : null
 }
 
+// Called when a new participant session starts
+export function resetParticipantState() {
+  localStorage.removeItem(STICK_KEY)
+  localStorage.removeItem(STAGE2_ATTEMPTS_KEY)
+}
 // ---------------------------------------------------------------
 // Stage 2: Random Dot Motion task. Only the summary of each attempt is kept
 // here (it decides whether the questionnaire unlocks); every trial is in the
