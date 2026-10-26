@@ -346,7 +346,7 @@ function onNavigationPress(step) {
         label: pick(navigationActions[step].label, preferredLayout ?? "xbox").trim(),
         expected_button: navigationActions[step].button,
         rt_ms: Math.round(performance.now() - stepShownAt),
-        skipped: false
+        skipped: 0
     });
     navigationPracticeStatus.textContent = pick(navigationActions[step].done, preferredLayout ?? "xbox");
     navigationPracticeStatus.classList.add("pressed");
@@ -533,7 +533,7 @@ skipStepButton.addEventListener("click", () => {
             label: pick(navigationActions[navigationStep].label, preferredLayout ?? "xbox").trim(),
             expected_button: navigationActions[navigationStep].button,
             rt_ms: "",
-            skipped: true
+            skipped: 1
         });
     }
     if (navigationStep + 1 < navigationActions.length) {
