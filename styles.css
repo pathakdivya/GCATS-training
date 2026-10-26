@@ -430,3 +430,12 @@ html.is-fullscreen .rdm-choice-btn, html.is-fullscreen .neo-button { font-size: 
   .stage-main { grid-template-columns: 1fr; overflow: auto; }
   .checklist-panel, .practice-panel { overflow: visible; }
 }
+
+.footer-table { width: 100%; border-collapse: collapse; }
+.footer-table td { width: 50%; padding: 0; vertical-align: middle; }
+.footer-table td:last-child { text-align: right; }
+
+@media (max-width: 600px) {
+  .footer-table td { display: block; width: 100%; }
+  .footer-table td:last-child { text-align: left; }
+}
