@@ -306,7 +306,7 @@ function lockTrial(step, distance) {
         event: step.type === "static" ? "static_trial" : "follow_trial",
         attempt: attemptNumber,
         trial_n: trial + 1,
-        guided: isGuided() ? 1 : 0,,
+        guided: isGuided() ? 1 : 0,
         target_x: step.type === "static" ? round4(target.x) : "",
         target_y: step.type === "static" ? round4(target.y) : "",
         speed_scale: step.type === "follow" ? round4(following.speedScale) : "",
