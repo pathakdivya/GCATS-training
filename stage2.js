@@ -437,6 +437,15 @@ function finishAttempt() {
             `Press <span class="navigation-key">${names.repeat}</span> to repeat the task<br>` +
             `Press <span class="navigation-key">${names.next}</span> to continue to the questionnaire`;
         statusText.textContent = "You can continue to the questionnaire.";
+
+    } else if (hasPassedStage2()) {
+     resultHeading.textContent = "Below your best";
+     resultMessage.textContent = `This attempt was under ${STAGE2_PASS_THRESHOLD}%, but you already met the criterion earlier. You can continue to the questionnaire or try again.`;
+     resultPrompt.innerHTML =
+         `Press <span class="navigation-key">${names.repeat}</span> to repeat the task<br>` +
+         `Press <span class="navigation-key">${names.next}</span> to continue to the questionnaire`;
+     statusText.textContent = "You can continue to the questionnaire.";
+       
     } else {
         resultHeading.textContent = "Almost there";
         resultMessage.textContent = `Your accuracy is below the required ${STAGE2_PASS_THRESHOLD}%. Please repeat Stage 2 before moving on.`;
