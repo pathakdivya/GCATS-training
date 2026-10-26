@@ -53,7 +53,8 @@ Continuous affective tracking tasks ask participants to make fine and sustained 
 
 ## Data & privacy
 
-All data is stored locally in the participant's browser (`localStorage`) and is only written to a file when the participant completes the final questionnaire and the session is exported as CSV. No data is transmitted anywhere by this app — export and handling of the resulting CSV is the experimenter's responsibility under their own IRB/ethics protocol.
+All data is stored locally in the participant's browser (`localStorage`) and is only written to a file when the participant completes the final questionnaire and the session is exported as CSV. No data is transmitted anywhere.
+> **export and handling of the resulting CSV is the experimenter's responsibility under their own IRB/ethics protocol**.
 
 ## License
 
